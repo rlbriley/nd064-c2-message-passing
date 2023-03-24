@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-default_box = "generic/opensuse15"
-
+#default_box = "generic/opensuse15"
+default_box = "opensuse/Leap-15.2.x86_64"
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -21,13 +21,16 @@ Vagrant.configure("2") do |config|
     master.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", disabled: true
     master.vm.network "forwarded_port", guest: 22, host: 2000 # Master Node SSH
     master.vm.network "forwarded_port", guest: 6443, host: 6443 # API Access
-    for p in 30000..30100 # expose NodePort IP's
+    for p in 30000..30006 # expose NodePort IP's
       master.vm.network "forwarded_port", guest: p, host: p, protocol: "tcp"
-      end
+    end
     master.vm.provider "virtualbox" do |v|
       v.memory = "3072"
       v.name = "master"
-      end
+      v.memory = "4096"
+      v.cpus = 4
+      v.customize ["modifyvm", :id, "--ioapic", "on"]
+    end
     master.vm.provision "shell", inline: <<-SHELL
       sudo zypper refresh
       sudo zypper --non-interactive install bzip2
@@ -68,6 +71,7 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder ".", "/vagrant", type: "rsync"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
