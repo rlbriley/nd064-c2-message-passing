@@ -7,3 +7,5 @@ Break up the current application into 3 microservices.
 - Connections
 
 Persons api: http://localhost:30001/api/persons
+
+Added api build to github actions.
