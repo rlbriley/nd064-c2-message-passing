@@ -33,7 +33,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DH_USERNAME }}
-          password: ${{ secrets.DH_SECRET }}
+#          password: ${{ secrets.DH_SECRET }}
+          password: dckr_pat_yF6m7a8IZh0tc4-G1VeWqPj2xEU
 
       - name: Build and push
         uses: docker/build-push-action@v4
