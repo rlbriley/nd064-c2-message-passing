@@ -6,7 +6,7 @@ from app import db
 from app.udaconnect.models import Connection, Location, Person
 from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
-from sqlalchemy.sql import text
+from sqlalchemy.sql import text, func
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
@@ -101,7 +101,10 @@ class LocationService:
             logger.warning(f"Unexpected data format in payload: {validation_results}")
             raise Exception(f"Invalid payload: {validation_results}")
 
+        # Primary key so should only be one at max
+        nextId = db.session.query(func.max(Location.id)).first()
         new_location = Location()
+        new_location.id = nextId + 1
         new_location.person_id = location["person_id"]
         new_location.creation_time = location["creation_time"]
         new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
@@ -114,7 +117,14 @@ class LocationService:
 class PersonService:
     @staticmethod
     def create(person: Dict) -> Person:
+        validation_results: Dict = LocationSchema().validate(person)
+        if validation_results:
+            logger.warning(f"Unexpected data format in payload: {validation_results}")
+            raise Exception(f"Invalid payload: {validation_results}")
+        # Primary key so should only be one at max
+        nextId = db.session.query(func.max(Person.id)).first()
         new_person = Person()
+        new_person.id = nextId + 1
         new_person.first_name = person["first_name"]
         new_person.last_name = person["last_name"]
         new_person.company_name = person["company_name"]
@@ -131,4 +141,4 @@ class PersonService:
 
     @staticmethod
     def retrieve_all() -> List[Person]:
-        return db.session.query(Person).all()
+        return db.session.query(Person).order_by(Person.id.asc).all()

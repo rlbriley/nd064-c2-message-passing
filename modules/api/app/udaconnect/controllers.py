@@ -9,7 +9,7 @@ from app.udaconnect.schemas import (
 from app.udaconnect.services import ConnectionService, LocationService, PersonService
 from flask import request
 from flask_accepts import accepts, responds
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, reqparse
 from typing import Optional, List
 
 DATE_FORMAT = "%Y-%m-%d"
@@ -21,7 +21,7 @@ api = Namespace("UdaConnect", description="Connections via geolocation.")  # noq
 
 
 @api.route("/locations")
-@api.route("/locations/<location_id>")
+@api.route("/locations/<int:location_id>")
 @api.param("location_id", "Unique ID for a given Location", _in="query")
 class LocationResource(Resource):
     @accepts(schema=LocationSchema)
@@ -32,6 +32,7 @@ class LocationResource(Resource):
         return location
 
     @responds(schema=LocationSchema)
+    @api.response(404, 'Location not found.')
     def get(self, location_id) -> Location:
         location: Location = LocationService.retrieve(location_id)
         return location
@@ -52,16 +53,17 @@ class PersonsResource(Resource):
         return persons
 
 
-@api.route("/persons/<person_id>")
+@api.route("/persons/<int:person_id>")
 @api.param("person_id", "Unique ID for a given Person", _in="query")
 class PersonResource(Resource):
     @responds(schema=PersonSchema)
+    @api.response(404, 'Person not found')
     def get(self, person_id) -> Person:
         person: Person = PersonService.retrieve(person_id)
         return person
 
 
-@api.route("/persons/<person_id>/connection")
+@api.route("/persons/<int:person_id>/connection")
 @api.param("start_date", "Lower bound of date range", _in="query")
 @api.param("end_date", "Upper bound of date range", _in="query")
 @api.param("distance", "Proximity to a given user in meters", _in="query")
