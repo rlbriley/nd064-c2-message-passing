@@ -32,7 +32,7 @@ class LocationResource(Resource):
         return location
 
     @responds(schema=LocationSchema)
-    @api.response(404, 'Location not found.')
+#    @api.response(404, 'Location not found.')
     def get(self, location_id) -> Location:
         location: Location = LocationService.retrieve(location_id)
         return location
@@ -57,7 +57,7 @@ class PersonsResource(Resource):
 @api.param("person_id", "Unique ID for a given Person", _in="query")
 class PersonResource(Resource):
     @responds(schema=PersonSchema)
-    @api.response(404, 'Person not found')
+#    @api.response(404, 'Person not found')
     def get(self, person_id) -> Person:
         person: Person = PersonService.retrieve(person_id)
         return person
