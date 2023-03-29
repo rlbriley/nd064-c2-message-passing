@@ -7,11 +7,11 @@ from app.udaconnect.schemas import (
     PersonSchema,
 )
 from app.udaconnect.services import ConnectionService, LocationService, PersonService
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource, reqparse
 from typing import Optional, List
-from werkzeug.exceptions import HTTPException, abort
+#from werkzeug.exceptions import HTTPException
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -87,6 +87,6 @@ class ConnectionDataResource(Resource):
         )
         return results
 
-@api.errorhandler(HTTPException)
-def handle_exception(e):
-    return jsonify({"message": e.description}), e.code
+#@api.errorhandler(HTTPException)
+#def handle_exception(e):
+#    return jsonify({"message": e.description}), e.code
