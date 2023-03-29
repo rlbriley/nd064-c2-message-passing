@@ -96,10 +96,10 @@ class LocationService:
 
     @staticmethod
     def create(location: Dict) -> Location:
-        validation_results: Dict = LocationSchema().validate(location)
-        if validation_results:
-            logger.warning(f"Unexpected data format in payload: {validation_results}")
-            raise Exception(f"Invalid payload: {validation_results}")
+        # validation_results: Dict = LocationSchema().validate(location)
+        # if validation_results:
+        #     logger.warning(f"Unexpected data format in payload: {validation_results}")
+        #     raise Exception(f"Invalid payload: {validation_results}")
 
         # Primary key so should only be one at max
         nextId = db.session.query(func.max(Location.id)).first()
@@ -117,10 +117,10 @@ class LocationService:
 class PersonService:
     @staticmethod
     def create(person: Dict) -> Person:
-        validation_results: Dict = LocationSchema().validate(person)
-        if validation_results:
-            logger.warning(f"Unexpected data format in payload: {validation_results}")
-            raise Exception(f"Invalid payload: {validation_results}")
+        # validation_results: Dict = LocationSchema().validate(person)
+        # if validation_results:
+        #     logger.warning(f"Unexpected data format in payload: {validation_results}")
+        #     raise Exception(f"Invalid payload: {validation_results}")
         # Primary key so should only be one at max
         nextId = db.session.query(func.max(Person.id)).first()
         new_person = Person()
