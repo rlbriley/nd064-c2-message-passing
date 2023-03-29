@@ -29,7 +29,7 @@ class LocationResource(Resource):
     def post(self) -> Location:
         request.get_json()
         location: Location = LocationService.create(request.get_json())
-        return location
+        return location, 201
 
     @responds(schema=LocationSchema)
 #    @api.response(404, 'Location not found.')
@@ -45,7 +45,7 @@ class PersonsResource(Resource):
     def post(self) -> Person:
         payload = request.get_json()
         new_person: Person = PersonService.create(payload)
-        return new_person
+        return new_person, 201
 
     @responds(schema=PersonSchema, many=True)
     def get(self) -> List[Person]:
