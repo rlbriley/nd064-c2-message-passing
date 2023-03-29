@@ -11,7 +11,6 @@ from flask import request, jsonify, abort
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource, reqparse
 from typing import Optional, List
-#from werkzeug.exceptions import HTTPException
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -93,9 +92,9 @@ class ConnectionDataResource(Resource):
 
 
 @api.errorhandler(400)
-def handle_exception(e):
-    return jsonify({"message": e.description}), e.code
+def bad_request(e):
+     return jsonify(error=str(e)), 400
 
 @api.errorhandler(404)
-def handle_exception1(e):
-    return jsonify({"message": e.description}), e.code
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
