@@ -7,10 +7,11 @@ from app.udaconnect.schemas import (
     PersonSchema,
 )
 from app.udaconnect.services import ConnectionService, LocationService, PersonService
-from flask import request
+from flask import request, jsonify
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource, reqparse
 from typing import Optional, List
+from werkzeug.exceptions import HTTPException, abort
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -29,12 +30,13 @@ class LocationResource(Resource):
     def post(self) -> Location:
         request.get_json()
         location: Location = LocationService.create(request.get_json())
-        return location, 201
+        return location
 
     @responds(schema=LocationSchema)
-#    @api.response(404, 'Location not found.')
     def get(self, location_id) -> Location:
         location: Location = LocationService.retrieve(location_id)
+        if not location:
+            abort(204)
         return location
 
 
@@ -45,7 +47,7 @@ class PersonsResource(Resource):
     def post(self) -> Person:
         payload = request.get_json()
         new_person: Person = PersonService.create(payload)
-        return new_person, 201
+        return new_person
 
     @responds(schema=PersonSchema, many=True)
     def get(self) -> List[Person]:
@@ -57,9 +59,10 @@ class PersonsResource(Resource):
 @api.param("person_id", "Unique ID for a given Person", _in="query")
 class PersonResource(Resource):
     @responds(schema=PersonSchema)
-#    @api.response(404, 'Person not found')
     def get(self, person_id) -> Person:
         person: Person = PersonService.retrieve(person_id)
+        if not person:
+            abort(204)
         return person
 
 
@@ -83,3 +86,7 @@ class ConnectionDataResource(Resource):
             meters=distance,
         )
         return results
+
+@api.errorhandler(HTTPException)
+def handle_exception(e):
+    return jsonify({"message": e.description}), e.code
