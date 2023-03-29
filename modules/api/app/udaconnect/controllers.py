@@ -34,9 +34,11 @@ class LocationResource(Resource):
 
     @responds(schema=LocationSchema)
     def get(self, location_id) -> Location:
+        if location_id is None:
+            abort(400, description="location_id not provided")
         location: Location = LocationService.retrieve(location_id)
         if not location:
-            abort(204)
+            abort(404, description="Resource not found")
         return location
 
 
@@ -60,9 +62,11 @@ class PersonsResource(Resource):
 class PersonResource(Resource):
     @responds(schema=PersonSchema)
     def get(self, person_id) -> Person:
+        if person_id is None:
+            abort(400, description="person_id not provided")
         person: Person = PersonService.retrieve(person_id)
         if not person:
-            abort(204)
+            abort(404, description="Resource not found")
         return person
 
 
@@ -87,6 +91,11 @@ class ConnectionDataResource(Resource):
         )
         return results
 
-#@api.errorhandler(HTTPException)
-#def handle_exception(e):
-#    return jsonify({"message": e.description}), e.code
+
+@api.errorhandler(400)
+def handle_exception(e):
+    return jsonify({"message": e.description}), e.code
+
+@api.errorhandler(404)
+def handle_exception1(e):
+    return jsonify({"message": e.description}), e.code
