@@ -102,7 +102,7 @@ class LocationService:
         #     raise Exception(f"Invalid payload: {validation_results}")
 
         # Primary key so should only be one at max
-        nextId = db.session.query(func.max(Location.id)).first()
+        nextId = db.session.query(func.max(Location.id)).scalar()
         new_location = Location()
         new_location.id = nextId + 1
         new_location.person_id = location["person_id"]
@@ -122,7 +122,7 @@ class PersonService:
         #     logger.warning(f"Unexpected data format in payload: {validation_results}")
         #     raise Exception(f"Invalid payload: {validation_results}")
         # Primary key so should only be one at max
-        nextId = db.session.query(func.max(Person.id)).first()
+        nextId = db.session.query(func.max(Person.id)).scalar()
         new_person = Person()
         new_person.id = nextId + 1
         new_person.first_name = person["first_name"]
