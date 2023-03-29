@@ -19,6 +19,13 @@ api = Namespace("UdaConnect", description="Connections via geolocation.")  # noq
 
 # TODO: This needs better exception handling
 
+@api.errorhandler(400)
+def bad_request(e):
+    return jsonify(error=str(e)), 400
+
+@api.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
 
 @api.route("/locations")
 @api.route("/locations/<int:location_id>")
@@ -89,12 +96,3 @@ class ConnectionDataResource(Resource):
             meters=distance,
         )
         return results
-
-
-@api.errorhandler(400)
-def bad_request(e):
-     return jsonify(error=str(e)), 400
-
-@api.errorhandler(404)
-def resource_not_found(e):
-    return jsonify(error=str(e)), 404
