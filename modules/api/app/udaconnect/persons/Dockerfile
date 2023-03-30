@@ -1,10 +1,10 @@
 FROM python:3.7-alpine
 
-WORKDIR /person
+WORKDIR /api
 
 RUN apk add --no-cache gcc musl-dev linux-headers geos libc-dev postgresql-dev
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
+COPY /modules/api/app/udaconnect/persons/requirements.txt /api/requirements.txt
+RUN pip install -r /api/requirements.txt
 
 EXPOSE 5001
 
