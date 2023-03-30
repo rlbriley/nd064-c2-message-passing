@@ -2,7 +2,7 @@ from __future__ import annotations
 
 #from dataclasses import dataclass
 
-from app import db  # noqa
+import db  # noqa
 #from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
 #from shapely.geometry.point import Point

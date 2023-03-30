@@ -2,8 +2,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
-from app.udaconnect.persons.models import Person  # noqa
-from app.udaconnect.persons.schemas import PersonSchema  # noqa
+from models import Person  # noqa
+from schemas import PersonSchema  # noqa
 
 
 db = SQLAlchemy()

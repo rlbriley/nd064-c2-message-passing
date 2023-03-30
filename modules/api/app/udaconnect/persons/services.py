@@ -2,9 +2,9 @@ import logging
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from app import db
-from app.udaconnect.persons.models import Person
-#from app.udaconnect.persons.schemas import ConnectionSchema, LocationSchema, PersonSchema
+import db
+from models import Person
+from schemas import PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 

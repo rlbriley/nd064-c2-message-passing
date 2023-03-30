@@ -1,9 +1,9 @@
 
-from app.udaconnect.persons.models import Person
-from app.udaconnect.persons.schemas import (
+from models import Person
+from schemas import (
     PersonSchema,
 )
-from app.udaconnect.services import PersonService
+from services import PersonService
 from flask import Flask, abort
 from flask import request
 from flask_accepts import accepts, responds
