@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: modules/api/app/udaconnect/persons Build and Push
+name: modules/persons Build and Push
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'modules/api/app/udaconnect/persons/**'
+      - 'modules/persons/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -39,11 +39,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./modules/api/app/udaconnect/persons/Dockerfile
+          file: ./modules/persons/Dockerfile
           platforms: linux/amd64
           push: true
           # The image gets pushed with this tag.
-          tags: rbriley/udaconnect-api-persons:latest
+          tags: rbriley/udaconnect-persons:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
