@@ -19,14 +19,6 @@ api = Namespace("UdaConnect", description="Connections via geolocation.")  # noq
 
 # TODO: This needs better exception handling
 
-# @api.errorhandler(400)
-# def bad_request(e):
-#     return jsonify(error=str(e)), 400
-
-# @api.errorhandler(404)
-# def resource_not_found(e):
-#     return jsonify(error=str(e)), 404
-
 @api.route("/locations")
 @api.route("/locations/<int:location_id>")
 @api.param("location_id", "Unique ID for a given Location", _in="query")
@@ -72,7 +64,7 @@ class PersonResource(Resource):
             abort(400, description="person_id not provided")
         person: Person = PersonService.retrieve(person_id)
         if not person:
-            abort(404, description="Resource not found")
+            abort(204, description="Resource not found")
         return person
 
 
