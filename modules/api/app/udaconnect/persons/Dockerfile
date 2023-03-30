@@ -8,5 +8,5 @@ RUN pip install -r /api/requirements.txt
 
 EXPOSE 5001
 
-COPY . .
+COPY /modules/api/app/udaconnect/persons/* /api
 CMD ["flask", "run", "--host", "0.0.0.0"]
