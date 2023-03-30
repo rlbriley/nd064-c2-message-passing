@@ -21,6 +21,6 @@ def create_app(env=None):
 
     @app.route("/health")
     def health():
-        return jsonify("healthy")
+        return jsonify("Persons Microservice healthy")
 
     return app
