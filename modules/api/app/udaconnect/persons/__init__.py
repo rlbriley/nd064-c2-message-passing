@@ -9,7 +9,7 @@ from app.udaconnect.persons.schemas import PersonSchema  # noqa
 db = SQLAlchemy()
 
 
-def register_routes(api, app, root="api"):
+def register_routes(api, root="api"):
     from app.udaconnect.controllers import api as udaconnect_api
 
     api.add_namespace(udaconnect_api, path=f"/{root}")
@@ -24,7 +24,7 @@ def create_app(env=None):
 
     CORS(app)  # Set CORS for development
 
-    register_routes(api, app)
+    register_routes(api)
     db.init_app(app)
 
     @app.route("/health")
