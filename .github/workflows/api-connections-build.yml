@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'modules/api/**'
+      - 'modules/connections/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -40,11 +40,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./modules/api/Dockerfile
+          file: ./modules/connections/Dockerfile
           platforms: linux/amd64
           push: true
           # The image gets pushed with this tag.
-          tags: rbriley/udaconnect-api:latest
+          tags: rbriley/udaconnect-connections:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

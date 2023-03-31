@@ -1,1 +1,1 @@
-docker build -f ./Dockerfile -t udaconnect-api .
+docker build -f ./Dockerfile -t udaconnect-locations .

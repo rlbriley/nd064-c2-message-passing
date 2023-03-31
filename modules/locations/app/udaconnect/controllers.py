@@ -1,16 +1,11 @@
-from datetime import datetime
-
-from app.udaconnect.models import Location, Person
+from app.udaconnect.models import Location
 from app.udaconnect.schemas import (
     LocationSchema,
 )
 from app.udaconnect.services import LocationService
-from flask import request, jsonify, abort
+from flask import request, abort
 from flask_accepts import accepts, responds
-from flask_restx import Namespace, Resource, reqparse
-from typing import Optional, List
-
-DATE_FORMAT = "%Y-%m-%d"
+from flask_restx import Namespace, Resource
 
 api = Namespace("UdaConnect", description="Connections via geolocation. Locations Microservice")  # noqa
 

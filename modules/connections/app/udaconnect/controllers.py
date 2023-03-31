@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from app.udaconnect.models import Connection, Location, Person
+#from app.udaconnect.models import Connection, Location, Person
 from app.udaconnect.schemas import (
     ConnectionSchema,
-    LocationSchema,
 )
 from app.udaconnect.services import ConnectionService, LocationService
 from flask import request, jsonify, abort
@@ -17,27 +16,6 @@ api = Namespace("UdaConnect", description="Connections via geolocation.")  # noq
 
 
 # TODO: This needs better exception handling
-
-@api.route("/locations")
-@api.route("/locations/<int:location_id>")
-@api.param("location_id", "Unique ID for a given Location", _in="query")
-class LocationResource(Resource):
-    @accepts(schema=LocationSchema)
-    @responds(schema=LocationSchema)
-    def post(self) -> Location:
-        request.get_json()
-        location: Location = LocationService.create(request.get_json())
-        return location
-
-    @responds(schema=LocationSchema)
-    def get(self, location_id) -> Location:
-        if location_id is None:
-            abort(400, description="location_id not provided")
-        location: Location = LocationService.retrieve(location_id)
-        if not location:
-            abort(404, description="Resource not found")
-        return location
-
 
 @api.route("/persons/<int:person_id>/connection")
 @api.param("start_date", "Lower bound of date range", _in="query")
