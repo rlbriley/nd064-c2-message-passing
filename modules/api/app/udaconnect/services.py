@@ -30,7 +30,7 @@ class ConnectionService:
         ).all()
 
         # Cache all users in memory for quick lookup
-        person_map: Dict[str, Person] = {person.id: person for person in PersonService.retrieve_all()}
+        person_map: Dict[str, Person] = {person.id: person for person in ConnectionService.retrieve_allpersons()}
 
         # Prepare arguments for queries
         data = []
@@ -80,6 +80,10 @@ class ConnectionService:
 
         return result
 
+    @staticmethod
+    def retrieve_allpersons() -> List[Person]:
+        return db.session.query(Person).order_by(Person.id.asc()).all()
+
 
 class LocationService:
     @staticmethod
@@ -112,33 +116,3 @@ class LocationService:
         db.session.commit()
 
         return new_location
-
-
-class PersonService:
-    @staticmethod
-    def create(person: Dict) -> Person:
-        # validation_results: Dict = LocationSchema().validate(person)
-        # if validation_results:
-        #     logger.warning(f"Unexpected data format in payload: {validation_results}")
-        #     raise Exception(f"Invalid payload: {validation_results}")
-        # Primary key so should only be one at max
-        nextId = db.session.query(func.max(Person.id)).scalar()
-        new_person = Person()
-        new_person.id = nextId + 1
-        new_person.first_name = person["first_name"]
-        new_person.last_name = person["last_name"]
-        new_person.company_name = person["company_name"]
-
-        db.session.add(new_person)
-        db.session.commit()
-
-        return new_person
-
-    @staticmethod
-    def retrieve(person_id: int) -> Person:
-        person = db.session.query(Person).get(person_id)
-        return person
-
-    @staticmethod
-    def retrieve_all() -> List[Person]:
-        return db.session.query(Person).order_by(Person.id.asc()).all()
