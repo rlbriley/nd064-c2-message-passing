@@ -4,7 +4,7 @@ from datetime import datetime
 from app.udaconnect.schemas import (
     ConnectionSchema,
 )
-from app.udaconnect.services import ConnectionService, LocationService
+from app.udaconnect.services import ConnectionService
 from flask import request, jsonify, abort
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource, reqparse
