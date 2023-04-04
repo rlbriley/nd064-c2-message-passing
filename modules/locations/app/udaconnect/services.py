@@ -1,4 +1,5 @@
 import logging
+import json
 from datetime import datetime, timedelta
 from typing import Dict, List
 
@@ -7,6 +8,7 @@ from app.udaconnect.models import Location
 from app.udaconnect.schemas import LocationSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text, func
+from kafka import KafkaConsumer
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("udaconnect-locations")
@@ -25,8 +27,20 @@ class LocationService:
         location.wkt_shape = coord_text
         return location
 
+    def nextId():
+        nextId = db.session.query(func.max(Location.id)).scalar()
+        return nextId
+
+    @staticmethod
+    def createThread():
+        logger.info("Running location consumer thread.")
+        locStr = KafkaConsumer('locations')
+        for loc in locStr:
+            create(loc)
+
     @staticmethod
     def create(location: Dict) -> Location:
+        logger.info("Processing location: " + json.dumps(location, 4) )
         # validation_results: Dict = LocationSchema().validate(location)
         # if validation_results:
         #     logger.warning(f"Unexpected data format in payload: {validation_results}")

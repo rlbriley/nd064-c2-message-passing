@@ -1,9 +1,16 @@
+import threading
+import logging
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
+from app.udaconnect.services import LocationService
+from kafka.admin import KafkaAdminClient, NewTopic
 
 db = SQLAlchemy()
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("udaconnect-locations")
 
 
 def create_app(env=None):
@@ -16,6 +23,11 @@ def create_app(env=None):
 
     CORS(app)  # Set CORS for development
 
+    createKafkaTopics()
+
+    logger.info("Creating thread for location service create.")
+    x = threading.Thread(target=LocationService.create, args=(1,), daemon=True)
+
     register_routes(api, app)
     db.init_app(app)
 
@@ -24,3 +36,14 @@ def create_app(env=None):
         return jsonify("Locations Microservice healthy")
 
     return app
+
+def createKafkaTopics():
+    logger.info("Creating kafka topic 'locations'.")
+    admin_client = KafkaAdminClient(
+        bootstrap_servers="localhost:9092",
+        client_id='test'
+    )
+
+    topic_list = []
+    topic_list.append(NewTopic(name="locations", num_partitions=1, replication_factor=1))
+    admin_client.create_topics(new_topics=topic_list, validate_only=False)
