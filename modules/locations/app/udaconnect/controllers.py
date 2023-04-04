@@ -6,9 +6,13 @@ from app.udaconnect.services import LocationService
 from flask import request, abort
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
+from kafka import KafkaProducer
 
 api = Namespace("UdaConnect", description="Connections via geolocation. Locations Microservice")  # noqa
 
+
+TOPIC_NAME = 'locations'
+KAFKA_SERVER = 'localhost:9092'
 
 # TODO: This needs better exception handling
 
@@ -23,8 +27,12 @@ class LocationResource(Resource):
         print(locationJson);
         nextId = LocationService.nextId();
         print("nextId: " + nextId)
-        location: Location = LocationService.create(locationJson)
-        return location
+        producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
+
+        producer.send(TOPIC_NAME, locationJson)
+        producer.flush()
+#        location: Location = LocationService.create(locationJson)
+        return locationJson
 
     @responds(schema=LocationSchema)
     def get(self, location_id) -> Location:

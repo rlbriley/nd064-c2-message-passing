@@ -13,6 +13,8 @@ from kafka import KafkaConsumer
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("udaconnect-locations")
 
+TOPIC_NAME = 'locations'
+KAFKA_SERVER = 'localhost:9092'
 
 class LocationService:
     @staticmethod
@@ -34,7 +36,7 @@ class LocationService:
     @staticmethod
     def createThread():
         logger.info("Running location consumer thread.")
-        locStr = KafkaConsumer('locations')
+        locStr = KafkaConsumer(TOPIC_NAME)
         for loc in locStr:
             create(loc)
 
