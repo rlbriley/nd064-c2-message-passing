@@ -23,14 +23,14 @@ def create_app(env=None):
 
     CORS(app)  # Set CORS for development
 
+    register_routes(api, app)
+    db.init_app(app)
+
 #    createKafkaTopics()
 
     logger.info("Creating thread for location service create.")
-    x = threading.Thread(target=LocationService.createThread, daemon=True)
-    x.start()
-
-    register_routes(api, app)
-    db.init_app(app)
+#    x = threading.Thread(target=LocationService.createThread, daemon=True)
+#    x.start()
 
     @app.route("/health")
     def health():
