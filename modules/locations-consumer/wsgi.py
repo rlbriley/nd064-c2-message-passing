@@ -15,7 +15,7 @@ from sqlalchemy.sql import text, func
 from kafka import KafkaConsumer
 
 TOPIC_NAME = 'locations'
-KAFKA_SERVER = 'kafka-broker:9092'
+KAFKA_SERVER = 'kafka-service.kafka:9092'
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("locations-consumer")
