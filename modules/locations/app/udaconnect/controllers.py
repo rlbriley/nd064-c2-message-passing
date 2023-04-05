@@ -1,3 +1,5 @@
+import logging
+
 from app.udaconnect.models import Location
 from app.udaconnect.schemas import (
     LocationSchema,
@@ -7,6 +9,9 @@ from flask import request, abort
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
 from kafka import KafkaProducer
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("udaconnect-locations")
 
 api = Namespace("UdaConnect", description="Connections via geolocation. Locations Microservice")  # noqa
 
@@ -27,6 +32,7 @@ class LocationResource(Resource):
         print(locationJson);
         nextId = LocationService.nextId();
         print("nextId: " + nextId)
+        logger.info(f"Adding Location to `locations` mailbox. {locationJson}")
         producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
         producer.send(TOPIC_NAME, locationJson)

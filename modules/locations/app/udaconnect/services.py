@@ -13,9 +13,6 @@ from kafka import KafkaConsumer
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("udaconnect-locations")
 
-TOPIC_NAME = 'locations'
-KAFKA_SERVER = 'localhost:9092'
-
 class LocationService:
     @staticmethod
     def retrieve(location_id) -> Location:
@@ -29,33 +26,22 @@ class LocationService:
         location.wkt_shape = coord_text
         return location
 
-    def nextId():
-        nextId = db.session.query(func.max(Location.id)).scalar()
-        return nextId
+    # def nextId():
+    #     nextId = db.session.query(func.max(Location.id)).scalar()
+    #     return nextId
 
-    @staticmethod
-    def createThread():
-        logger.info("Running location consumer thread.")
-        locStr = KafkaConsumer(TOPIC_NAME)
-        for loc in locStr:
-            create(loc)
+    # @staticmethod
+    # def create(location: Dict) -> Location:
+    #     logger.info("Processing location: " + json.dumps(location, 4) )
 
-    @staticmethod
-    def create(location: Dict) -> Location:
-        logger.info("Processing location: " + json.dumps(location, 4) )
-        # validation_results: Dict = LocationSchema().validate(location)
-        # if validation_results:
-        #     logger.warning(f"Unexpected data format in payload: {validation_results}")
-        #     raise Exception(f"Invalid payload: {validation_results}")
+    #     # Primary key so should only be one at max
+    #     nextId = db.session.query(func.max(Location.id)).scalar()
+    #     new_location = Location()
+    #     new_location.id = nextId + 1
+    #     new_location.person_id = location["person_id"]
+    #     new_location.creation_time = location["creation_time"]
+    #     new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
+    #     db.session.add(new_location)
+    #     db.session.commit()
 
-        # Primary key so should only be one at max
-        nextId = db.session.query(func.max(Location.id)).scalar()
-        new_location = Location()
-        new_location.id = nextId + 1
-        new_location.person_id = location["person_id"]
-        new_location.creation_time = location["creation_time"]
-        new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
-        db.session.add(new_location)
-        db.session.commit()
-
-        return new_location
+    #     return new_location
