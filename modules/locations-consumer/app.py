@@ -2,8 +2,8 @@ from __future__ import annotations
 import logging
 
 from datetime import datetime
-#from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
-#from werkzeug.exceptions import abort
+from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
+from werkzeug.exceptions import abort
 from flask_sqlalchemy import SQLAlchemy
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
@@ -21,6 +21,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("locations-consumer")
 
 db = SQLAlchemy()
+
+app = Flask(__name__)
 
 class Person(db.Model):
     __tablename__ = "person"
@@ -95,6 +97,9 @@ class LocationService:
         db.session.commit()
 
         return new_location
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 # Start the service. This method never returns!
 LocationService.createThread()
