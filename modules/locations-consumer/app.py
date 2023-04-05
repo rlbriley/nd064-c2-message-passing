@@ -1,11 +1,9 @@
 from __future__ import annotations
 import logging
-import shapely.geometry
-import shapely.wkt
 
 from datetime import datetime
-from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
-from werkzeug.exceptions import abort
+#from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
+#from werkzeug.exceptions import abort
 from flask_sqlalchemy import SQLAlchemy
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
