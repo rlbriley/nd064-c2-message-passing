@@ -17,7 +17,7 @@ api = Namespace("UdaConnect", description="Connections via geolocation. Location
 
 
 TOPIC_NAME = 'locations'
-KAFKA_SERVER = 'localhost:9092'
+KAFKA_SERVER = 'kafka-service.default.svc.cluster.local:9092'
 
 # TODO: This needs better exception handling
 

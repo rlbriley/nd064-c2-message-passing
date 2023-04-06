@@ -12,14 +12,14 @@ Persons api: http://localhost:30001/api/persons
 
 Added api build to github actions.
 
-- run `kubectlfka apply -f zookeeper.yaml`
-- run `kubectl get services -n kafka`
-- run `kubectl get services -n kafka | grep zookeeper-service | awk '{ print $3 }'` to get the zookeeper ip address.
-- Edit kafka.yaml and replace the ipaddress in KAFKA_ZOOKEEPER_CONNECT (line 37). Save the file.
+- Run `kubectl apply -f zookeeper.yaml` to install zookeeper and zookeeper-service.
+- Run `kubectl get services zookeeper-service | grep zookeeper-service | awk '{ print $3 }'` to get the zookeeper ip address.
+- Edit kafka.yaml and replace the ipaddress in KAFKA_ZOOKEEPER_CONNECT (line 37) with the IP returned from the previous step. Save the file.
 - run `kubectl apply -f kafka.yaml`
 - Add "127.0.0.1 kafka-broker" to  C:\Windows\System32\drivers\etc\hosts
-- run `kubectl port-forward <kafka pod name> 9092 -n kafka`
+- Run `kubectl port-forward <kafka pod name> 9092` in a separate window. Because it will keep running as long as it is forwarding the port.
 - Install kafka locally.
-- `kafka-topics.bat --create --topic locations --bootstrap-server localhost:9092`
+- Run `kafka-topics.bat --create --topic locations --bootstrap-server localhost:9092` to create the 'locations' topic in kafka.
+   <br/>Optional `kafka-topics.bat --list --bootstrap-server localhost:9092` can be used to check for the newly created topic.
 
 
