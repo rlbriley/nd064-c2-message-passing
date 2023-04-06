@@ -15,7 +15,7 @@ from sqlalchemy.sql import text, func
 from kafka import KafkaConsumer
 
 TOPIC_NAME = 'locations'
-KAFKA_SERVER = 'kafka-service.kafka:9092'
+KAFKA_SERVER = 'kafka-service.kafka.svc.cluster.local:9092'
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("locations-consumer")
@@ -77,7 +77,7 @@ class LocationService:
     @staticmethod
     def createThread():
         logger.info("Running location consumer thread.")
-        locStr = KafkaConsumer(TOPIC_NAME)
+        locStr = KafkaConsumer('locations')
         for loc in locStr:
             print(f"loc: {loc}")
             create(loc)
@@ -100,6 +100,3 @@ class LocationService:
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-# Start the service. This method never returns!
-LocationService.createThread()

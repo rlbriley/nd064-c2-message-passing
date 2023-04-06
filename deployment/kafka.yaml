@@ -4,7 +4,7 @@ metadata:
   labels:
     app: kafka-broker
   name: kafka-service
-  namespace: kafka
+  namespace: default
 spec:
   ports:
   - port: 9092
@@ -19,7 +19,7 @@ metadata:
   labels:
     app: kafka-broker
   name: kafka-broker
-  namespace: kafka
+  namespace: default
 spec:
   replicas: 1
   selector:
