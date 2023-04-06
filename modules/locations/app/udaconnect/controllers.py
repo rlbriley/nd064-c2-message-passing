@@ -30,8 +30,8 @@ class LocationResource(Resource):
     def post(self) -> Location:
         locationJson = request.get_json();
         print(locationJson);
-        nextId = LocationService.nextId();
-        print("nextId: " + nextId)
+        # nextId = LocationService.nextId();
+        # print("nextId: " + nextId)
         logger.info(f"Adding Location to `locations` mailbox. {locationJson}")
         producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
