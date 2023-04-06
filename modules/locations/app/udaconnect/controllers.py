@@ -1,4 +1,6 @@
 import logging
+import json
+from bson import json_util
 
 from app.udaconnect.models import Location
 from app.udaconnect.schemas import (
@@ -16,7 +18,7 @@ logger = logging.getLogger("udaconnect-locations")
 api = Namespace("UdaConnect", description="Connections via geolocation. Locations Microservice")  # noqa
 
 
-TOPIC_NAME = 'locations'
+TOPIC_NAME = b'locations'
 KAFKA_SERVER = 'kafka-service.default.svc.cluster.local:9092'
 
 # TODO: This needs better exception handling
@@ -33,8 +35,9 @@ class LocationResource(Resource):
         logger.info(f"Adding Location to `locations` mailbox. {locationJson}")
         producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
-        # send to kafka as a binary utf-8 object
-        producer.send(TOPIC_NAME, locationJson.encode('utf-8'))
+        # send to kafka
+        locStr = json.dumps(locationJson, default=json_util.default).encode('utf-8')
+        producer.send(TOPIC_NAME, locStr)
         producer.flush()
         return locationJson
 

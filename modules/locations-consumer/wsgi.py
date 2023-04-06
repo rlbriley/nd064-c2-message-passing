@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+import json
 
 from datetime import datetime
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
@@ -77,12 +78,13 @@ class LocationService:
     @staticmethod
     def createThread():
         logger.info("Running location consumer thread.")
-        locStr = KafkaConsumer('locations')
+        locStr = KafkaConsumer(b'locations')
+
         for loc in locStr:
             # convert from utf-8 binary back to string
-            locationStr = str(loc)
-            print(f"location String: {locationStr}")
-            create(locationStr)
+            print(f"location String: {loc}")
+            locationJson = json.loads(loc)
+            create(locationJson)
 
     @staticmethod
     def create(location: Dict) -> Location:
