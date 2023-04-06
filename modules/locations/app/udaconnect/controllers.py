@@ -1,6 +1,5 @@
 import logging
 import json
-from bson import json_util
 
 from app.udaconnect.models import Location
 from app.udaconnect.schemas import (
@@ -36,7 +35,7 @@ class LocationResource(Resource):
         producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
         # send to kafka
-        locStr = json.dumps(locationJson, default=json_util.default).encode('utf-8')
+        locStr = json.dumps(locationJson).encode('utf-8')
         producer.send(TOPIC_NAME, locStr)
         producer.flush()
         return locationJson
