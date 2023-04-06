@@ -79,8 +79,10 @@ class LocationService:
         logger.info("Running location consumer thread.")
         locStr = KafkaConsumer('locations')
         for loc in locStr:
-            print(f"loc: {loc}")
-            create(loc)
+            # convert from utf-8 binary back to string
+            locationStr = str(loc)
+            print(f"location String: {locationStr}")
+            create(locationStr)
 
     @staticmethod
     def create(location: Dict) -> Location:
