@@ -15,7 +15,7 @@ from sqlalchemy.sql import text, func
 from kafka import KafkaConsumer
 
 TOPIC_NAME = 'locations'
-KAFKA_SERVER = 'kafka-service.kafka.svc.cluster.local:9092'
+KAFKA_SERVER = 'kafka-service.default.svc.cluster.local:9092'
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("locations-consumer")
