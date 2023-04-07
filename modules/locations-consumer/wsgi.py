@@ -124,7 +124,7 @@ class LocationService:
         # db.session.commit()
         cur = conn.cursor()
         cur.execute(f"INSERT INTO location SET(id, person_id, coordinate, creation_time) VALUES \
-                     ({nextId}, {location["person_id"]}, '{ST_Point(location["latitude"], location["longitude"])}', '{location["creation_time"]}');")
+                     ({nextId}, {location['person_id']}, \'{ST_Point(location['latitude'], location['longitude'])}\', \'{location['creation_time']}\');")
         conn.commit();
 
         return new_location
