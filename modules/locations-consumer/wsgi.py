@@ -73,7 +73,7 @@ class Location(db.Model):
 
 class LocationService:
     def nextId():
-        nextId = db.session.query(func.max(Location.id)).scalar()
+        nextId: int = (db.session.query(func.max(Location.id)).scalar() + 1)
         return nextId
 
     @staticmethod
@@ -94,12 +94,12 @@ class LocationService:
 
     @staticmethod
     def create(location: Dict) -> Location:
-        logger.info("Processing location: " + json.dumps(location, 4) )
+        logger.info(f"Processing location: {location} )
 
         # Primary key so should only be one at max
         nextId = nextId()
         new_location = Location()
-        new_location.id = nextId + 1
+        new_location.id = nextId
         new_location.person_id = location["person_id"]
         new_location.creation_time = location["creation_time"]
         new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
