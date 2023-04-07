@@ -83,8 +83,13 @@ class LocationService:
 
         for loc in locStr:
             # convert from utf-8 binary back to string
-            print(f"location String: {loc}")
-            locationJson = json.loads(loc)
+            logger.info(f"loc: {loc}")
+            logger.info(f"loc type: {type(loc)}")
+            value = loc.value
+            logger.info(f"value: {value}")
+            logger.info(f"value type: {type(value)}")
+            locationJson = json.loads(value)
+            logger.info(f"locationJson type: {type(locationJson)}")
             create(locationJson)
 
     @staticmethod
