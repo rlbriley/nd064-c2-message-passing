@@ -10,6 +10,7 @@ from flask import request, abort
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
 from kafka import KafkaProducer
+from marshmallow import ValidationError
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("udaconnect-locations")
@@ -48,7 +49,7 @@ class LocationResource(Resource):
         producer.flush()
         logger.info(f"exiting post()")
         try:
-            location = LocationSchema(many=true).load(locationJson)
+            location = LocationSchema().load(locationJson)
         except ValidationError as err:
             logger.error(err.messages)
         return location
