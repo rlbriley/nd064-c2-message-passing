@@ -33,50 +33,50 @@ logger = logging.getLogger("locations-consumer")
 conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
 # db = SQLAlchemy()
 
-# class Person(db.Model):
-#     __tablename__ = "person"
+class Person(db.Model):
+    __tablename__ = "person"
 
-#     id = Column(Integer, primary_key=True)
-#     first_name = Column(String, nullable=False)
-#     last_name = Column(String, nullable=False)
-#     company_name = Column(String, nullable=False)
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    company_name = Column(String, nullable=False)
 
 
-# class Location(db.Model):
-#     __tablename__ = "location"
+class Location(db.Model):
+    __tablename__ = "location"
 
-#     id = Column(BigInteger, primary_key=True)
-#     person_id = Column(Integer, ForeignKey(Person.id), nullable=False)
-#     coordinate = Column(Geometry("POINT"), nullable=False)
-#     creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
-#     _wkt_shape = str(None)
+    id = Column(BigInteger, primary_key=True)
+    person_id = Column(Integer, ForeignKey(Person.id), nullable=False)
+    coordinate = Column(Geometry("POINT"), nullable=False)
+    creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
+    _wkt_shape = str(None)
 
-#     @property
-#     def wkt_shape(self) -> str:
-#         # Persist binary form into readable text
-#         if not self._wkt_shape:
-#             point: Point = to_shape(self.coordinate)
-#             # normalize WKT returned by to_wkt() from shapely and ST_AsText() from DB
-#             self._wkt_shape = point.to_wkt().replace("POINT ", "ST_POINT")
-#         return self._wkt_shape
+    @property
+    def wkt_shape(self) -> str:
+        # Persist binary form into readable text
+        if not self._wkt_shape:
+            point: Point = to_shape(self.coordinate)
+            # normalize WKT returned by to_wkt() from shapely and ST_AsText() from DB
+            self._wkt_shape = point.to_wkt().replace("POINT ", "ST_POINT")
+        return self._wkt_shape
 
-#     @wkt_shape.setter
-#     def wkt_shape(self, v: str) -> None:
-#         self._wkt_shape = v
+    @wkt_shape.setter
+    def wkt_shape(self, v: str) -> None:
+        self._wkt_shape = v
 
-#     def set_wkt_with_coords(self, lat: str, long: str) -> str:
-#         self._wkt_shape = f"ST_POINT({lat} {long})"
-#         return self._wkt_shape
+    def set_wkt_with_coords(self, lat: str, long: str) -> str:
+        self._wkt_shape = f"ST_POINT({lat} {long})"
+        return self._wkt_shape
 
-#     @hybrid_property
-#     def longitude(self) -> str:
-#         coord_text = self.wkt_shape
-#         return coord_text[coord_text.find(" ") + 1 : coord_text.find(")")]
+    @hybrid_property
+    def longitude(self) -> str:
+        coord_text = self.wkt_shape
+        return coord_text[coord_text.find(" ") + 1 : coord_text.find(")")]
 
-#     @hybrid_property
-#     def latitude(self) -> str:
-#         coord_text = self.wkt_shape
-#         return coord_text[coord_text.find("(") + 1 : coord_text.find(" ")]
+    @hybrid_property
+    def latitude(self) -> str:
+        coord_text = self.wkt_shape
+        return coord_text[coord_text.find("(") + 1 : coord_text.find(" ")]
 
 class LocationService:
     @staticmethod
@@ -86,10 +86,10 @@ class LocationService:
         # logger.info(f"query: {func.max(Location.id)}")
         cur = conn.cursor()
         cur.execute(f"SELECT MAX(id) FROM location;")
-        rows = cur.fetchall()
+        rows = cur.fetchone()
         logger.info(f"rows: {rows}")
-
-        nextId = row[0].scalar() + 1
+        # Should be a single row with a single value.
+        nextId = rows[0].scalar() + 1
         logger.info(f"get_next_id() exiting. nextId: {nextId}")
         return nextId
 
@@ -122,6 +122,10 @@ class LocationService:
         # new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
         # db.session.add(new_location)
         # db.session.commit()
+        cur = conn.cursor()
+        cur.execute(f"INSERT INTO location SET(id, person_id, coordinate, creation_time) VALUES \
+                     ({nextId}, {location["person_id"]}, '{ST_Point(location["latitude"], location["longitude"])}', '{location["creation_time"]}');")
+        conn.commit();
 
         return new_location
 
