@@ -124,10 +124,7 @@ def create_app(env=None):
 
 app = create_app(os.getenv("FLASK_ENV") or "test")
 
-if __name__ == '__main__':
-    # Start the service. This method never returns!
-    LocationService.createThread()
+# Start the service. This method never returns!
+LocationService.createThread()
 
-    logger.info(f"Starting app")
-    app.run(debug=True)
 
