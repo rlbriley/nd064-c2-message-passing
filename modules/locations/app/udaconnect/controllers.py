@@ -31,6 +31,7 @@ class LocationResource(Resource):
     def post(self) -> Location:
         logger.info(f"post()")
         locationJson = request.get_json()
+
         logger.info(f"locationJson: {locationJson}")
         logger.info(f"locationJson type: {type(locationJson)}")
         logger.info(f"request type: {type(request)}")
@@ -46,7 +47,11 @@ class LocationResource(Resource):
         logger.info(f"Calling producer.flush()")
         producer.flush()
         logger.info(f"exiting post()")
-        return request
+        try:
+            location = LocationSchema(many=true).load(locationJson)
+        except ValidationError as err:
+            logger.error(err.messages)
+        return location
 
     @responds(schema=LocationSchema)
     def get(self, location_id) -> Location:
