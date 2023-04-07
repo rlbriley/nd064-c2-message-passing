@@ -72,7 +72,8 @@ class Location(db.Model):
         return coord_text[coord_text.find("(") + 1 : coord_text.find(" ")]
 
 class LocationService:
-    def nextId():
+    @staticmethod
+    def get_next_id():
         nextId: int = (db.session.query(func.max(Location.id)).scalar() + 1)
         return nextId
 
@@ -97,7 +98,7 @@ class LocationService:
         logger.info(f"Processing location: {location}")
 
         # Primary key so should only be one at max
-        nextId = nextId()
+        nextId = LocationService.get_next_id()
         new_location = Location()
         new_location.id = nextId
         new_location.person_id = location["person_id"]
