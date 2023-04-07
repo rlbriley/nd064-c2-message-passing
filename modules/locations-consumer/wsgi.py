@@ -90,7 +90,7 @@ class LocationService:
             logger.info(f"value type: {type(value)}")
             locationJson = json.loads(value)
             logger.info(f"locationJson type: {type(locationJson)}")
-            create(locationJson)
+            LocationService.create(locationJson)
 
     @staticmethod
     def create(location: Dict) -> Location:
