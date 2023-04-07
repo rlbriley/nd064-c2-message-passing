@@ -12,6 +12,7 @@ Persons api: http://localhost:30001/api/persons
 
 Added api build to github actions.
 
+- From the root of the project switch to the deployment directory. `cd deployment`
 - Run `kubectl apply -f zookeeper.yaml` to install zookeeper and zookeeper-service.
 - Run `kubectl get services zookeeper-service | grep zookeeper-service | awk '{ print $3 }'` to get the zookeeper ip address.
 - Edit kafka.yaml and replace the ipaddress in KAFKA_ZOOKEEPER_CONNECT (line 37) with the IP returned from the previous step. Save the file.

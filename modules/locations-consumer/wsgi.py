@@ -23,8 +23,6 @@ logger = logging.getLogger("locations-consumer")
 
 db = SQLAlchemy()
 
-app = Flask(__name__)
-
 class Person(db.Model):
     __tablename__ = "person"
 
@@ -102,7 +100,10 @@ class LocationService:
 
         return new_location
 
+app = create_app(os.getenv("FLASK_ENV") or "test")
+
 if __name__ == '__main__':
+    logger.info(f"Starting app")
     app.run(debug=True)
 
     # Start the service. This method never returns!
