@@ -119,13 +119,15 @@ def create_app(env=None):
     def health():
         return jsonify("Locations Microservice healthy")
 
+    logger.info("create_app() complete")
     return app
 
 app = create_app(os.getenv("FLASK_ENV") or "test")
 
 if __name__ == '__main__':
+    # Start the service. This method never returns!
+    LocationService.createThread()
+
     logger.info(f"Starting app")
     app.run(debug=True)
 
-    # Start the service. This method never returns!
-    LocationService.createThread()
