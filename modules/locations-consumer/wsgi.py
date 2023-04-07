@@ -33,6 +33,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 TESTING = True
 SQLALCHEMY_DATABASE_URI = (
     f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("locations-consumer")
