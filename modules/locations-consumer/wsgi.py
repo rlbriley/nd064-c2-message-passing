@@ -2,6 +2,7 @@ from __future__ import annotations
 import logging
 import json
 
+from app import create_app
 from datetime import datetime
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
