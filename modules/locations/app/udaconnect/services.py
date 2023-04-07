@@ -10,7 +10,7 @@ from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text, func
 from kafka import KafkaConsumer
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("udaconnect-locations")
 
 class LocationService:

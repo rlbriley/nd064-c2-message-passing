@@ -24,9 +24,6 @@ def create_app(env=None):
     register_routes(api, app)
     db.init_app(app)
 
-    # Start the service. This method never returns!
-    LocationService.createThread()
-
 
     @app.route("/health")
     def health():

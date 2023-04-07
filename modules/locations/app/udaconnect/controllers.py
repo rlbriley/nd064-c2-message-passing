@@ -11,13 +11,13 @@ from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
 from kafka import KafkaProducer
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("udaconnect-locations")
 
 api = Namespace("UdaConnect", description="Connections via geolocation. Locations Microservice")  # noqa
 
 
-TOPIC_NAME = b'locations'
+TOPIC_NAME = 'locations'
 KAFKA_SERVER = 'kafka-service.default.svc.cluster.local:9092'
 
 # TODO: This needs better exception handling

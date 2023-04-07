@@ -104,3 +104,6 @@ class LocationService:
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+    # Start the service. This method never returns!
+    LocationService.createThread()
