@@ -20,10 +20,24 @@ from kafka import KafkaConsumer
 
 TOPIC_NAME = 'locations'
 KAFKA_SERVER = 'kafka-service.default.svc.cluster.local:9092'
+DB_USERNAME = os.environ["DB_USERNAME"]
+DB_PASSWORD = os.environ["DB_PASSWORD"]
+DB_HOST = os.environ["DB_HOST"]
+DB_PORT = os.environ["DB_PORT"]
+DB_NAME = os.environ["DB_NAME"]
+
+CONFIG_NAME = "test"
+SECRET_KEY = os.getenv("TEST_SECRET_KEY", "Thanos did nothing wrong")
+DEBUG = True
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+TESTING = True
+SQLALCHEMY_DATABASE_URI = (
+    f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("locations-consumer")
 
+#conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
 db = SQLAlchemy()
 
 class Person(db.Model):
@@ -74,7 +88,14 @@ class Location(db.Model):
 class LocationService:
     @staticmethod
     def get_next_id():
+        logger.info(f"get_next_id()"")
         nextId: int = (db.session.query(func.max(Location.id)).scalar() + 1)
+        # cur = conn.cursor()
+        # logger.info(f"query: {func.max(Location.id)}")
+        # cur.execute(func.max(Location.id))
+        # rows = cur.fetchall()
+        # nextId = row[0].scalar() + 1
+        logger.info(f"get_next_id() exiting. nextId: {nextId}")
         return nextId
 
     @staticmethod
@@ -106,6 +127,10 @@ class LocationService:
         new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
         db.session.add(new_location)
         db.session.commit()
+        # cur = conn.cursor()
+        # logger.info(f"query: {func.max(Location.id)}")
+        # cur.execute(func.max(Location.id))
+        # rows = cur.fetchall()
 
         return new_location
 
@@ -114,16 +139,16 @@ def create_app(env=None):
 
     logger.info("create_app()")
     app = Flask(__name__)
-    # api = Api(app, title="UdaConnect API Locations", version="0.1.0")
+    api = Api(app, title="UdaConnect API Locations", version="0.1.0")
 
-    # CORS(app)  # Set CORS for development
+    CORS(app)  # Set CORS for development
 
     db.init_app(app)
 
 
-    # @app.route("/health")
-    # def health():
-    #     return jsonify("Locations Microservice healthy")
+    @app.route("/health")
+    def health():
+        return jsonify("Locations Microservice healthy")
 
     logger.info("create_app() complete")
     return app
