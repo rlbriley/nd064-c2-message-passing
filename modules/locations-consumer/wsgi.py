@@ -119,12 +119,15 @@ class LocationService:
         new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
         db.session.add(new_location)
         db.session.commit()
-        # cur = conn.cursor()
-        # logger.info(f"query: {func.max(Location.id)}")
-        # cur.execute(func.max(Location.id))
-        # rows = cur.fetchall()
 
         return new_location
+
+class BaseConfig:
+    CONFIG_NAME = "base"
+    USE_MOCK_EQUIVALENCY = False
+    DEBUG = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
 
 class TestingConfig(BaseConfig):
     CONFIG_NAME = "test"
