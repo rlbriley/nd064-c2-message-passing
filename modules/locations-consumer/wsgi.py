@@ -89,7 +89,7 @@ class Location(db.Model):
 class LocationService:
     @staticmethod
     def get_next_id():
-        logger.info(f"get_next_id()"")
+        logger.info(f"get_next_id()")
         nextId: int = (db.session.query(func.max(Location.id)).scalar() + 1)
         # cur = conn.cursor()
         # logger.info(f"query: {func.max(Location.id)}")
