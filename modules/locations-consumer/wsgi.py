@@ -79,7 +79,7 @@ class LocationService:
     @staticmethod
     def createThread():
         logger.info("Running location consumer thread.")
-        locStr = KafkaConsumer(b'locations')
+        locStr = KafkaConsumer(TOPIC_NAME, bootstrap_servers=[KAFKA_SERVER])
 
         for loc in locStr:
             # convert from utf-8 binary back to string
