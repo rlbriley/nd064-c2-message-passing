@@ -1,6 +1,6 @@
 from app.udaconnect.models import Location
 from geoalchemy2.types import Geometry as GeometryType
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, post_load, ValidationError
 from marshmallow_sqlalchemy.convert import ModelConverter as BaseModelConverter
 
 
@@ -27,5 +27,5 @@ class LocationSchema(Schema):
         model = Location
 
     @post_load
-    def create_location(felf, data, **kwargs):
+    def create_location(self, data, **kwargs):
         return LocationInit(**data)
