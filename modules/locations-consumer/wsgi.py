@@ -114,16 +114,16 @@ def create_app(env=None):
 
     logger.info("create_app()")
     app = Flask(__name__)
-    api = Api(app, title="UdaConnect API Locations", version="0.1.0")
+    # api = Api(app, title="UdaConnect API Locations", version="0.1.0")
 
-    CORS(app)  # Set CORS for development
+    # CORS(app)  # Set CORS for development
 
     db.init_app(app)
 
 
-    @app.route("/health")
-    def health():
-        return jsonify("Locations Microservice healthy")
+    # @app.route("/health")
+    # def health():
+    #     return jsonify("Locations Microservice healthy")
 
     logger.info("create_app() complete")
     return app
