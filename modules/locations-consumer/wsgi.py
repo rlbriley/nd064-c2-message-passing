@@ -94,7 +94,7 @@ class LocationService:
 
     @staticmethod
     def create(location: Dict) -> Location:
-        logger.info(f"Processing location: {location} )
+        logger.info(f"Processing location: {location}")
 
         # Primary key so should only be one at max
         nextId = nextId()
