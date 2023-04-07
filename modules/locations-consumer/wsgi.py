@@ -26,15 +26,6 @@ DB_HOST = os.environ["DB_HOST"]
 DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
 
-CONFIG_NAME = "test"
-SECRET_KEY = os.getenv("TEST_SECRET_KEY", "Thanos did nothing wrong")
-DEBUG = True
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-TESTING = True
-SQLALCHEMY_DATABASE_URI = (
-    f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-)
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("locations-consumer")
 
@@ -135,11 +126,21 @@ class LocationService:
 
         return new_location
 
+class TestingConfig(BaseConfig):
+    CONFIG_NAME = "test"
+    SECRET_KEY = os.getenv("TEST_SECRET_KEY", "Thanos did nothing wrong")
+    DEBUG = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = (
+        f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
 
 def create_app(env=None):
 
     logger.info("create_app()")
     app = Flask(__name__)
+    app.config.from_object(TestingConfig)
     api = Api(app, title="UdaConnect API Locations", version="0.1.0")
 
     CORS(app)  # Set CORS for development
