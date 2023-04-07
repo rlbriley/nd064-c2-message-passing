@@ -29,14 +29,18 @@ class LocationResource(Resource):
     @accepts(schema=LocationSchema)
     @responds(schema=LocationSchema)
     def post(self) -> Location:
+        logger.info(f"post()")
         locationJson = request.get_json()
-        print(locationJson)
-        logger.info(f"Adding Location to `locations` mailbox. {locationJson}")
+        logger.info(f"locationJson: {locationJson}")
+        logger.info(f"locationJson type: {type(locationJson)}")
         producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
         # send to kafka
         locStr = json.dumps(locationJson).encode('utf-8')
+        logger.info(f"Adding Location to `locations` mailbox. '{locStr}'")
+        logger.info(f"locStr type: {type(locStr)}")
         producer.send(TOPIC_NAME, locStr)
+        logger.info(f"Calling producer.flush()")
         producer.flush()
         return locationJson
 
