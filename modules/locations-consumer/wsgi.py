@@ -83,8 +83,8 @@ class LocationService:
     def get_next_id():
         logger.info(f"get_next_id()")
         # nextId: int = (db.session.query(func.max(Location.id)).scalar() + 1)
+        # logger.info(f"query: {func.max(Location.id)}")
         cur = conn.cursor()
-        logger.info(f"query: {func.max(Location.id)}")
         cur.execute(func.max(Location.id))
         rows = cur.fetchall()
         nextId = row[0].scalar() + 1
