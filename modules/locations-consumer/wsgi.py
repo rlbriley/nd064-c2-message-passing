@@ -66,7 +66,7 @@ class LocationService:
         # Primary key so should only be one at max
         nextId = LocationService.get_next_id()
         cur = conn.cursor()
-        query = f"INSERT INTO location SET(id, person_id, coordinate, creation_time) VALUES \
+        query = f"INSERT INTO location (id, person_id, coordinate, creation_time) VALUES \
                  ({nextId}, {location['person_id']}, \'{ST_Point(location['latitude'], location['longitude'])}\', \'{location['creation_time']}\');"
         logger.info(f"Query: {query}")
         cur.execute(query)
