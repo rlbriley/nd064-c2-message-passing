@@ -89,7 +89,7 @@ class LocationService:
         rows = cur.fetchone()
         logger.info(f"rows: {rows}")
         # Should be a single row with a single value.
-        nextId = rows[0].scalar() + 1
+        nextId = rows[0] + 1
         logger.info(f"get_next_id() exiting. nextId: {nextId}")
         return nextId
 
@@ -123,8 +123,10 @@ class LocationService:
         # db.session.add(new_location)
         # db.session.commit()
         cur = conn.cursor()
-        cur.execute(f"INSERT INTO location SET(id, person_id, coordinate, creation_time) VALUES \
-                     ({nextId}, {location['person_id']}, \'{ST_Point(location['latitude'], location['longitude'])}\', \'{location['creation_time']}\');")
+        query = f"INSERT INTO location SET(id, person_id, coordinate, creation_time) VALUES \
+                 ({nextId}, {location['person_id']}, \'{ST_Point(location['latitude'], location['longitude'])}\', \'{location['creation_time']}\');"
+        logger.info(f"Query: {query}")
+        cur.execute(query)
         conn.commit();
 
         return new_location
