@@ -27,7 +27,7 @@ class LocationService:
         rows = cur.fetchone()
         # Should be a single row with a single value.
         nextId = rows[0] + 1
-        logger.info(f"get_next_id() exiting. nextId: {nextId}")
+        logger.debug(f"get_next_id() exiting. nextId: {nextId}")
         return nextId
 
     @staticmethod

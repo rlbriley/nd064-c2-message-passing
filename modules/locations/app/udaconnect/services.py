@@ -5,10 +5,9 @@ from typing import Dict, List
 
 from app import db
 from app.udaconnect.models import Location
-from app.udaconnect.schemas import LocationSchema
-from geoalchemy2.functions import ST_AsText, ST_Point
-from sqlalchemy.sql import text, func
-from kafka import KafkaConsumer
+# from app.udaconnect.schemas import LocationSchema
+from geoalchemy2.functions import ST_AsText
+# from sqlalchemy.sql import text, func
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("udaconnect-locations")

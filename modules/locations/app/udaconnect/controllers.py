@@ -21,6 +21,8 @@ api = Namespace("UdaConnect", description="Connections via geolocation. Location
 TOPIC_NAME = 'locations'
 KAFKA_SERVER = 'kafka-service.default.svc.cluster.local:9092'
 
+producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
+
 # TODO: This needs better exception handling
 
 @api.route("/locations")
@@ -30,24 +32,17 @@ class LocationResource(Resource):
     @accepts(schema=LocationSchema)
     @responds(schema=LocationSchema)
     def post(self) -> Location:
-        logger.info(f"post()")
         locationJson = request.get_json()
 
-        logger.info(f"locationJson: {locationJson}")
-        logger.info(f"locationJson type: {type(locationJson)}")
-        logger.info(f"request type: {type(request)}")
-        producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
+        # producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
 
         # send to kafka
         locStr = json.dumps(locationJson).encode('utf-8')
         logger.info(f"Adding Location to `locations` mailbox. '{locStr}'")
-        logger.info(f"locStr type: {type(locStr)}")
 
         producer.send(TOPIC_NAME, locStr)
 
-        logger.info(f"Calling producer.flush()")
         producer.flush()
-        logger.info(f"exiting post()")
         try:
             location = LocationSchema().load(locationJson)
         except ValidationError as err:
