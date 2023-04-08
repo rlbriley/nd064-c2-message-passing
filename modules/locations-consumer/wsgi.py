@@ -1,18 +1,8 @@
 from __future__ import annotations
 import logging
-import os
 import json
 import psycopg2
 
-from datetime import datetime
-# from geoalchemy2 import Geometry
-# from geoalchemy2.shape import to_shape
-# from geoalchemy2.functions import ST_Point
-# from shapely.geometry.point import Point
-# from sqlalchemy import BigInteger, Column, Date, DateTime, ForeignKey, Integer, String
-# from sqlalchemy.dialects.postgresql import JSONB, UUID
-# from sqlalchemy.ext.hybrid import hybrid_property
-# from sqlalchemy.sql import text, func
 from kafka import KafkaConsumer
 
 TOPIC_NAME = 'locations'
@@ -65,9 +55,5 @@ class LocationService:
         cur.execute(query)
         conn.commit()
 
-        return new_location
-
 # Start the service. This method never returns!
 LocationService.createThread()
-
-
