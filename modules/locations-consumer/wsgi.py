@@ -5,14 +5,14 @@ import json
 import psycopg2
 
 from datetime import datetime
-from geoalchemy2 import Geometry
-from geoalchemy2.shape import to_shape
-from geoalchemy2.functions import ST_Point
-from shapely.geometry.point import Point
-from sqlalchemy import BigInteger, Column, Date, DateTime, ForeignKey, Integer, String
-from sqlalchemy.dialects.postgresql import JSONB, UUID
-from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.sql import text, func
+# from geoalchemy2 import Geometry
+# from geoalchemy2.shape import to_shape
+# from geoalchemy2.functions import ST_Point
+# from shapely.geometry.point import Point
+# from sqlalchemy import BigInteger, Column, Date, DateTime, ForeignKey, Integer, String
+# from sqlalchemy.dialects.postgresql import JSONB, UUID
+# from sqlalchemy.ext.hybrid import hybrid_property
+# from sqlalchemy.sql import text, func
 from kafka import KafkaConsumer
 
 TOPIC_NAME = 'locations'
@@ -31,13 +31,9 @@ conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD
 class LocationService:
     @staticmethod
     def get_next_id():
-        logger.info(f"get_next_id()")
-        # nextId: int = (db.session.query(func.max(Location.id)).scalar() + 1)
-        # logger.info(f"query: {func.max(Location.id)}")
         cur = conn.cursor()
         cur.execute(f"SELECT MAX(id) FROM location;")
         rows = cur.fetchone()
-        logger.info(f"rows: {rows}")
         # Should be a single row with a single value.
         nextId = rows[0] + 1
         logger.info(f"get_next_id() exiting. nextId: {nextId}")
@@ -50,13 +46,8 @@ class LocationService:
 
         for loc in locStr:
             # convert from utf-8 binary back to string
-            logger.info(f"loc: {loc}")
-            logger.info(f"loc type: {type(loc)}")
             value = loc.value
-            logger.info(f"value: {value}")
-            logger.info(f"value type: {type(value)}")
             locationJson = json.loads(value)
-            logger.info(f"locationJson type: {type(locationJson)}")
             LocationService.create(locationJson)
 
     @staticmethod
@@ -66,11 +57,13 @@ class LocationService:
         # Primary key so should only be one at max
         nextId = LocationService.get_next_id()
         cur = conn.cursor()
+        # according to the documentation the latitude and longitude are backwards in
+        # this statement. However it matches the code in the original query.
         query = f"INSERT INTO location (id, person_id, coordinate, creation_time) VALUES \
-                 ({nextId}, {location['person_id']}, \'{ST_Point(location['latitude'], location['longitude'])}\', \'{location['creation_time']}\');"
+                 ({nextId}, {location['person_id']}, ST_GeomFromText(\'POINT({location['latitude']} {location['longitude']})\', 4326), \'{location['creation_time']}\');"
         logger.info(f"Query: {query}")
         cur.execute(query)
-        conn.commit();
+        conn.commit()
 
         return new_location
 
