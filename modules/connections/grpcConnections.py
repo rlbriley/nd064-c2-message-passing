@@ -76,7 +76,16 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
             logger.info(f"Next row: {row}")
 
         # # Cache all users in memory for quick lookup
-        # person_map: Dict[str, Person] = {person.id: person for person in ConnectionService.retrieve_allpersons()}
+        person_map: dict[int, Person] = {}
+        query = f"SELECT * FROM person"
+        cur.execute(query)
+        rows = cur.fetchall()
+        logger.info(f"All Rows: {rows}")
+        for row in rows:
+            logger.info(f"Next row: {row}")
+            per: Person = Person(row[0], row[1], row[2], row[3], row[4])
+            person_map[row[0]] = Person(row[0], row[1], row[2], row[3], row[4])
+
 
         # # Prepare arguments for queries
         # data = []
@@ -131,6 +140,12 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
 
         return connList
 
+class Person:
+    def __init__(self, id: int, first_name: str, last_name: str, company_name: str):
+        self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.company_name = company_name
 
 # Initialize gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
