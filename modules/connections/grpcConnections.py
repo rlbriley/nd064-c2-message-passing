@@ -70,9 +70,10 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
 
         cur = conn.cursor()
         cur.execute(query)
-        rows = cur.fetch()
+        rows = cur.fetchall()
+        print(f"All Rows: {rows}")
         for row in rows:
-            print(row)
+            print(f"Next row: {row}")
 
         # # Cache all users in memory for quick lookup
         # person_map: Dict[str, Person] = {person.id: person for person in ConnectionService.retrieve_allpersons()}
@@ -123,7 +124,12 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         #             )
         #         )
 
-        return result
+        connList = connections_pb2.ConnectionList()
+        # connList.connections.append(connMsg)
+
+        print(f"Response: {connList}")
+
+        return connList
 
 
 # Initialize gRPC server
