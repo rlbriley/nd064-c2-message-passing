@@ -17,7 +17,7 @@ DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
 
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger("udaconnect-connections")
+logger = logging.getLogger("udaconnect-grpc-connections")
 
 conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
 #conn = psycopg2.connect(database="geoconnections", user="ct_admin", password="wowimsosecure", host="10.98.244.16", port="5432")
@@ -66,14 +66,14 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
                     query += f" AND creation_time <= '{request.end_date}'"
         query += ";"
 
-        print(f"Query: {query}")
+        logger.info(f"Query: {query}")
 
         cur = conn.cursor()
         cur.execute(query)
         rows = cur.fetchall()
-        print(f"All Rows: {rows}")
+        logger.info(f"All Rows: {rows}")
         for row in rows:
-            print(f"Next row: {row}")
+            logger.info(f"Next row: {row}")
 
         # # Cache all users in memory for quick lookup
         # person_map: Dict[str, Person] = {person.id: person for person in ConnectionService.retrieve_allpersons()}
@@ -127,7 +127,7 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         connList = connections_pb2.ConnectionList()
         # connList.connections.append(connMsg)
 
-        print(f"Response: {connList}")
+        logger.info(f"Response: {connList}")
 
         return connList
 
@@ -137,7 +137,8 @@ server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
 connections_pb2_grpc.add_ConnectionsServiceServicer_to_server(ConnectionsServicer(), server)
 
 
-print("Server starting on port 5005...")
+logger.info("Server starting on port 5005...")
+
 server.add_insecure_port("[::]:5005")
 server.start()
 # Keep thread alive
