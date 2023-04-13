@@ -44,7 +44,7 @@ jobs:
           platforms: linux/amd64
           push: true
           # The image gets pushed with this tag.
-          tags: rbriley/udaconnect-connections:latest
+          tags: rbriley/udaconnect-grpc-connections:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
