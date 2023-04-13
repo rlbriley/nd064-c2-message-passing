@@ -11,3 +11,6 @@ Break up the current application into 3 microservices.
 Persons api: http://localhost:30001/api/persons
 
 Added api build to github actions.
+
+Generate files from proto definition
+`python -m grpc_tools.protoc -I./ --python_out=./ --grpc_python_out=./ connections.proto`

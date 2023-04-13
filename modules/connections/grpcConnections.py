@@ -10,18 +10,17 @@ import connections_pb2_grpc
 import logging
 import psycopg2
 
-# DB_USERNAME = os.environ["DB_USERNAME"]
-# DB_PASSWORD = os.environ["DB_PASSWORD"]
-# DB_HOST = os.environ["DB_HOST"]
-# #DB_HOST = "localhost"
-# DB_PORT = os.environ["DB_PORT"]
-# DB_NAME = os.environ["DB_NAME"]
+DB_USERNAME = os.environ["DB_USERNAME"]
+DB_PASSWORD = os.environ["DB_PASSWORD"]
+DB_HOST = os.environ["DB_HOST"]
+DB_PORT = os.environ["DB_PORT"]
+DB_NAME = os.environ["DB_NAME"]
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("udaconnect-connections")
 
-#conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
-conn = psycopg2.connect(database="geoconnections", user="ct_admin", password="wowimsosecure", host="10.98.244.16", port="5432")
+conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
+#conn = psycopg2.connect(database="geoconnections", user="ct_admin", password="wowimsosecure", host="10.98.244.16", port="5432")
 
 class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     # def person_contacts(self, request, context):
@@ -60,16 +59,18 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         """
         query = ""
         if request.person:
-            query = f"SELECT * FROM LOCATION WHERE person_id = '{request.person}'"
+            query = f"SELECT * FROM location WHERE person_id = '{request.person}'"
             if request.start_date:
                 query += f" AND creation_time >= '{request.start_date}'"
                 if request.end_date:
                     query += f" AND creation_time <= '{request.end_date}'"
         query += ";"
 
+        print(f"Query: {query}")
+
         cur = conn.cursor()
         cur.execute(query)
-        rows = cur.fetchone()
+        rows = cur.fetch()
         for row in rows:
             print(row)
 
