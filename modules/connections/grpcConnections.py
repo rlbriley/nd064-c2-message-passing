@@ -83,8 +83,8 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         logger.info(f"All Rows: {rows}")
         for row in rows:
             logger.info(f"Next row: {row}")
-            per: Person = Person(row[0], row[1], row[2], row[3], row[4])
-            person_map[row[0]] = Person(row[0], row[1], row[2], row[3], row[4])
+            per: Person = Person(row[0], row[1], row[2], row[3])
+            person_map[row[0]] = Person(row[0], row[1], row[2], row[3])
 
 
         # # Prepare arguments for queries
