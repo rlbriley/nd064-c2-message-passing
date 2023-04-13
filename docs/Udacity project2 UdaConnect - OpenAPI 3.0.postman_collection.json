@@ -1,0 +1,1089 @@
+{
+	"info": {
+		"_postman_id": "a7581e34-5517-4889-9897-9b485dc0630e",
+		"name": "Udacity project2 UdaConnect - OpenAPI 3.0",
+		"description": "Conferences and conventions are hotspots for making connections. Professionals in\nattendance often share the same interests and can make valuable business and\npersonal connections with one another. At the same time, these events draw a large\ncrowd and it's often hard to make these connections in the midst of all of these\nevents' excitement and energy. To help attendees make connections, we are building\nthe infrastructure for a service that can inform attendees if they have attended\nthe same booths and presentations at an event.\n\nContact Support:\n Email: rlbrileyjr@gmail.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "locations",
+			"item": [
+				{
+					"name": "Add a new location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const bodyJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"The response is an object\", function() {\r",
+									"    // parse the response JSON\r",
+									"    console.log(bodyJson);\r",
+									"    pm.expect(bodyJson).to.be.an(\"object\");\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"creation_time\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"person_id\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"longitude\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"id\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"latitude\")).to.equal(true);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 1500ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 29,\n  \"person_id\": 1,\n  \"longitude\": \"37.553441\",\n  \"latitude\": \"-122.290524\",\n  \"creation_time\": \"2020-08-18T10:37:06\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{locationsBaseUrl}}/locations",
+							"host": [
+								"{{locationsBaseUrl}}"
+							],
+							"path": [
+								"locations"
+							]
+						},
+						"description": "Add a new location"
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 29,\n  \"person_id\": 1,\n  \"longitude\": \"37.553441\",\n  \"latitude\": \"-122.290524\",\n  \"creation_time\": \"2020-08-18T10:37:06\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations"
+									],
+									"variable": [
+										{
+											"key": "api_port",
+											"value": "{{api_port}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 29,\n  \"person_id\": 1,\n  \"longitude\": \"37.553441\",\n  \"latitude\": \"-122.290524\",\n  \"creation_time\": \"2020-08-18T10:37:06\"\n}"
+						},
+						{
+							"name": "Invalid input",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 29,\n  \"person_id\": 1,\n  \"longitude\": \"37.553441\",\n  \"latitude\": \"-122.290524\",\n  \"creation_time\": \"2020-08-18T10:37:06\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations"
+									],
+									"variable": [
+										{
+											"key": "api_port",
+											"value": "{{api_port}}"
+										}
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Return location identified by location_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const bodyJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"The response to be a location object\", function() {\r",
+									"    // parse the response JSON\r",
+									"    console.log(bodyJson);\r",
+									"    pm.expect(bodyJson).to.be.an(\"object\");\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"creation_time\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"person_id\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"longitude\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"id\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"latitude\")).to.equal(true);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 50ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{locationsBaseUrl}}/locations/:location_id",
+							"host": [
+								"{{locationsBaseUrl}}"
+							],
+							"path": [
+								"locations",
+								":location_id"
+							],
+							"variable": [
+								{
+									"key": "location_id",
+									"value": "30",
+									"description": "(Required) ID of location that needs to be fetched"
+								}
+							]
+						},
+						"description": "Return location identified by location_id"
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/:location_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										":location_id"
+									],
+									"variable": [
+										{
+											"key": "location_id",
+											"value": "70691014",
+											"description": "(Required) ID of location that needs to be fetched"
+										},
+										{
+											"key": "api_port",
+											"value": "{{api_port}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 29,\n  \"person_id\": 1,\n  \"longitude\": \"37.553441\",\n  \"latitude\": \"-122.290524\",\n  \"creation_time\": \"2020-08-18T10:37:06\"\n}"
+						},
+						{
+							"name": "Invalid location_id supplied",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/:location_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										":location_id"
+									],
+									"variable": [
+										{
+											"key": "location_id",
+											"value": "70691014",
+											"description": "(Required) ID of location that needs to be fetched"
+										},
+										{
+											"key": "api_port",
+											"value": "{{api_port}}"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Location not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/:location_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										":location_id"
+									],
+									"variable": [
+										{
+											"key": "location_id",
+											"value": "70691014",
+											"description": "(Required) ID of location that needs to be fetched"
+										},
+										{
+											"key": "api_port",
+											"value": "{{api_port}}"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Validation exception",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/:location_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										":location_id"
+									],
+									"variable": [
+										{
+											"key": "location_id",
+											"value": "70691014",
+											"description": "(Required) ID of location that needs to be fetched"
+										},
+										{
+											"key": "api_port",
+											"value": "{{api_port}}"
+										}
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "persons",
+			"item": [
+				{
+					"name": "{person_id}",
+					"item": [
+						{
+							"name": "Get persons by person id.",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const bodyJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											"\r",
+											"pm.test(\"The response to be a valid person object.\", function() {\r",
+											"    // parse the response JSON\r",
+											"    console.log(bodyJson);\r",
+											"    pm.expect(bodyJson).to.be.an(\"object\");\r",
+											"    pm.expect(bodyJson.hasOwnProperty(\"first_name\")).to.equal(true);\r",
+											"    pm.expect(bodyJson.hasOwnProperty(\"last_name\")).to.equal(true);\r",
+											"    pm.expect(bodyJson.hasOwnProperty(\"id\")).to.equal(true);\r",
+											"    pm.expect(bodyJson.hasOwnProperty(\"company_name\")).to.equal(true);\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Content-Type header is application/json\", () => {\r",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 50ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{personsBaseUrl}}/persons/:person_id",
+									"host": [
+										"{{personsBaseUrl}}"
+									],
+									"path": [
+										"persons",
+										":person_id"
+									],
+									"variable": [
+										{
+											"key": "person_id",
+											"value": "6",
+											"description": "(Required) ID of person that needs to be fetched"
+										}
+									]
+								},
+								"description": "Return person by id."
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{personsBaseUrl}}/persons/:person_id",
+											"host": [
+												"{{personsBaseUrl}}"
+											],
+											"path": [
+												"persons",
+												":person_id"
+											],
+											"variable": [
+												{
+													"key": "person_id",
+													"value": "70691014",
+													"description": "(Required) ID of person that needs to be fetched"
+												},
+												{
+													"value": "{{api_port}}",
+													"key": "api_port"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": 1,\n  \"first_name\": \"Bob\",\n  \"last_name\": \"Baker\",\n  \"company_name\": \"My Company\"\n}"
+								},
+								{
+									"name": "Person not found.",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{personsBaseUrl}}/persons/:person_id",
+											"host": [
+												"{{personsBaseUrl}}"
+											],
+											"path": [
+												"persons",
+												":person_id"
+											],
+											"variable": [
+												{
+													"key": "person_id",
+													"value": "70691014",
+													"description": "(Required) ID of person that needs to be fetched"
+												},
+												{
+													"value": "{{api_port}}",
+													"key": "api_port"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get connections for a given person identified by person_id.",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const bodyJson = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function() {\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											"\r",
+											"pm.test(\"The response has at least 5 people\", function() {\r",
+											"    // parse the response JSON\r",
+											"    console.log(bodyJson);\r",
+											"    pm.expect(bodyJson).to.be.an(\"array\");\r",
+											"    pm.expect(bodyJson.length).to.be.greaterThan(4);\r",
+											"    var first = bodyJson.first();\r",
+											"})\r",
+											"\r",
+											"pm.test(\"Content-Type header is application/json\", () => {\r",
+											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 50ms\", () => {\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{connectionsBaseUrl}}/persons/:person_id/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5",
+									"host": [
+										"{{connectionsBaseUrl}}"
+									],
+									"path": [
+										"persons",
+										":person_id",
+										"connection"
+									],
+									"query": [
+										{
+											"key": "start_date",
+											"value": "2020-01-01",
+											"description": "Lower bound of date range"
+										},
+										{
+											"key": "end_date",
+											"value": "2020-12-30",
+											"description": "Upper bound of date range"
+										},
+										{
+											"key": "distance",
+											"value": "5",
+											"description": "Proximity to a given user in meters"
+										}
+									],
+									"variable": [
+										{
+											"key": "person_id",
+											"value": "5",
+											"description": "(Required) ID of person to return connections of"
+										}
+									]
+								},
+								"description": "Returns list of connections."
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{personsBaseUrl}}/persons/:person_id/connection",
+											"host": [
+												"{{personsBaseUrl}}"
+											],
+											"path": [
+												"persons",
+												":person_id",
+												"connection"
+											],
+											"variable": [
+												{
+													"key": "person_id",
+													"value": "70691014",
+													"description": "(Required) ID of person to return connections of"
+												},
+												{
+													"value": "{{api_port}}",
+													"key": "api_port"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  {\n    \"location\": {\n      \"id\": 29,\n      \"person_id\": 1,\n      \"longitude\": \"37.553441\",\n      \"latitude\": \"-122.290524\",\n      \"creation_time\": \"2020-08-18T10:37:06\"\n    },\n    \"person\": {\n      \"id\": 1,\n      \"first_name\": \"Bob\",\n      \"last_name\": \"Baker\",\n      \"company_name\": \"My Company\"\n    }\n  },\n  {\n    \"location\": {\n      \"id\": 29,\n      \"person_id\": 1,\n      \"longitude\": \"37.553441\",\n      \"latitude\": \"-122.290524\",\n      \"creation_time\": \"2020-08-18T10:37:06\"\n    },\n    \"person\": {\n      \"id\": 1,\n      \"first_name\": \"Bob\",\n      \"last_name\": \"Baker\",\n      \"company_name\": \"My Company\"\n    }\n  }\n]"
+								},
+								{
+									"name": "Invalid ID supplied",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{personsBaseUrl}}/persons/:person_id/connection",
+											"host": [
+												"{{personsBaseUrl}}"
+											],
+											"path": [
+												"persons",
+												":person_id",
+												"connection"
+											],
+											"variable": [
+												{
+													"key": "person_id",
+													"value": "70691014",
+													"description": "(Required) ID of person to return connections of"
+												},
+												{
+													"value": "{{api_port}}",
+													"key": "api_port"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Person not found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{personsBaseUrl}}/persons/:person_id/connection",
+											"host": [
+												"{{personsBaseUrl}}"
+											],
+											"path": [
+												"persons",
+												":person_id",
+												"connection"
+											],
+											"variable": [
+												{
+													"key": "person_id",
+													"value": "70691014",
+													"description": "(Required) ID of person to return connections of"
+												},
+												{
+													"value": "{{api_port}}",
+													"key": "api_port"
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Get all persons.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const bodyJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"The response has at least 5 people\", function() {\r",
+									"    // parse the response JSON\r",
+									"    console.log(bodyJson);\r",
+									"    pm.expect(bodyJson).to.be.an(\"array\");\r",
+									"    pm.expect(bodyJson.length).to.be.greaterThan(4);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 50ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{personsBaseUrl}}/persons",
+							"host": [
+								"{{personsBaseUrl}}"
+							],
+							"path": [
+								"persons"
+							]
+						},
+						"description": "Return all persons."
+					},
+					"response": [
+						{
+							"name": "successful operation",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{personsBaseUrl}}/persons",
+									"host": [
+										"{{personsBaseUrl}}"
+									],
+									"path": [
+										"persons"
+									],
+									"variable": [
+										{
+											"value": "{{api_port}}",
+											"key": "api_port"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  [\n    {\n      \"id\": 1,\n      \"first_name\": \"Bob\",\n      \"last_name\": \"Baker\",\n      \"company_name\": \"My Company\"\n    },\n    {\n      \"id\": 1,\n      \"first_name\": \"Bob\",\n      \"last_name\": \"Baker\",\n      \"company_name\": \"My Company\"\n    }\n  ],\n  [\n    {\n      \"id\": 1,\n      \"first_name\": \"Bob\",\n      \"last_name\": \"Baker\",\n      \"company_name\": \"My Company\"\n    },\n    {\n      \"id\": 1,\n      \"first_name\": \"Bob\",\n      \"last_name\": \"Baker\",\n      \"company_name\": \"My Company\"\n    }\n  ]\n]"
+						},
+						{
+							"name": "Persons not found.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{personsBaseUrl}}/persons",
+									"host": [
+										"{{personsBaseUrl}}"
+									],
+									"path": [
+										"persons"
+									],
+									"query": [
+										{
+											"key": null,
+											"value": "",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"value": "{{api_port}}",
+											"key": "api_port"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Add a new person",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const bodyJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"The response is an object\", function() {\r",
+									"    // parse the response JSON\r",
+									"    console.log(bodyJson);\r",
+									"    pm.expect(bodyJson).to.be.an(\"object\");\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"first_name\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"last_name\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"id\")).to.equal(true);\r",
+									"    pm.expect(bodyJson.hasOwnProperty(\"company_name\")).to.equal(true);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Content-Type header is application/json\", () => {\r",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 50ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 99,\n  \"first_name\": \"Charlie\",\n  \"last_name\": \"Chaplin\",\n  \"company_name\": \"Charlies Company\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{personsBaseUrl}}/persons",
+							"host": [
+								"{{personsBaseUrl}}"
+							],
+							"path": [
+								"persons"
+							]
+						},
+						"description": "Add a new person"
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 1,\n  \"first_name\": \"Bob\",\n  \"last_name\": \"Baker\",\n  \"company_name\": \"My Company\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{personsBaseUrl}}/persons",
+									"host": [
+										"{{personsBaseUrl}}"
+									],
+									"path": [
+										"persons"
+									],
+									"variable": [
+										{
+											"value": "{{api_port}}",
+											"key": "api_port"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 1,\n  \"first_name\": \"Bob\",\n  \"last_name\": \"Baker\",\n  \"company_name\": \"My Company\"\n}"
+						},
+						{
+							"name": "Invalid input",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 1,\n  \"first_name\": \"Bob\",\n  \"last_name\": \"Baker\",\n  \"company_name\": \"My Company\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{personsBaseUrl}}/persons",
+									"host": [
+										"{{personsBaseUrl}}"
+									],
+									"path": [
+										"persons"
+									],
+									"variable": [
+										{
+											"value": "{{api_port}}",
+											"key": "api_port"
+										}
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "apiPort",
+			"value": "30001",
+			"type": "any"
+		},
+		{
+			"key": "connectionsPort",
+			"value": "30001",
+			"type": "default"
+		},
+		{
+			"key": "personsPort",
+			"value": "30002",
+			"type": "default"
+		},
+		{
+			"key": "locationsPort",
+			"value": "30003",
+			"type": "default"
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:{{apiPort}}/api",
+			"type": "string"
+		},
+		{
+			"key": "connectionsBaseUrl",
+			"value": "http://localhost:{{connectionsPort}}/api",
+			"type": "default"
+		},
+		{
+			"key": "personsBaseUrl",
+			"value": "http://localhost:{{personsPort}}/api",
+			"type": "default"
+		},
+		{
+			"key": "locationsBaseUrl",
+			"value": "http://localhost:{{locationsPort}}/api",
+			"type": "default"
+		}
+	]
+}

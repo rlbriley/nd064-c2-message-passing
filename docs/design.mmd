@@ -1,0 +1,37 @@
+---
+title: Refactored Design
+---
+graph TD
+    USER((User)) --> | REST | PERSONS
+    USER((User)) --> | REST | LOCATIONS
+    UI(Frontend) --> | REST | PERSONS(Persons)
+    UI --> | REST | CONNECTIONS(Connections)
+    PERSONS --> | SQL | DBP(Persons Table)
+    LOCATIONS(Locations) --> | Kafka | LOC_CONSUMER(Locations_consumer)
+    LOC_CONSUMER(Locations_consumer) --> | SQL | DBL(Locations Table)
+    CONNECTIONS --> | SQL | DBP
+    CONNECTIONS --> | SQL | DBL
+    subgraph SUBA ["app container"]
+        UI
+    end
+    subgraph SUBP ["Persons<br>container"]
+        PERSONS
+    end
+    subgraph SUBL ["Locations"]
+        subgraph SUBL1 ["Locations container"]
+            LOCATIONS
+        end
+        subgraph SUBL2 ["Locations_consumer container"]
+            LOC_CONSUMER
+        end
+    end
+    subgraph SUBC ["Connections<br>container"]
+        CONNECTIONS
+    end
+    subgraph SUBD ["Database"]
+        DBL
+        DBP
+    end
+
+    classDef orange fill:#f96
+    class SUBA,SUBC,SUBL1,SUBL2,SUBP orange

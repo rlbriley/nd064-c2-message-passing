@@ -1,0 +1,231 @@
+openapi: 3.0.3
+info:
+  title: Udacity project2 UdaConnect - OpenAPI 3.0
+  description: |-
+    Conferences and conventions are hotspots for making connections. Professionals in
+    attendance often share the same interests and can make valuable business and
+    personal connections with one another. At the same time, these events draw a large
+    crowd and it's often hard to make these connections in the midst of all of these
+    events' excitement and energy. To help attendees make connections, we are building
+    the infrastructure for a service that can inform attendees if they have attended
+    the same booths and presentations at an event.
+  contact:
+    email: rlbrileyjr@gmail.com
+  version: 0.0.1
+servers:
+  - url: http://localhost:{api_port}/api
+    variables:
+      api_port:
+        default: '30001'
+paths:
+  /locations:
+    post:
+      summary: Add a new location
+      description: Add a new location
+      operationId: create
+      requestBody:
+        description: Create a new location
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '405':
+          description: Invalid input
+  /locations/{location_id}:
+    get:
+      summary: Return location identified by location_id
+      description: Return location identified by location_id
+      operationId: LocationService.retrieve
+      parameters:
+        - name: location_id
+          in: path
+          description: ID of location that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '400':
+          description: Invalid location_id supplied
+        '404':
+          description: Location not found
+        '405':
+          description: Validation exception
+  /persons:
+    get:
+      summary: Get all persons.
+      description: Return all persons.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Persons'
+        '400':
+          description: Persons not found.
+    post:
+      summary: Add a new person
+      description: Add a new person
+      operationId: PersonService.create
+      requestBody:
+        description: Create a new person
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '405':
+          description: Invalid input
+  /persons/{person_id}:
+    get:
+      summary: Get person by person id.
+      description: Return person by id.
+      parameters:
+        - name: person_id
+          in: path
+          description: ID of person that needs to be fetched
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          description: Person not found.
+  /persons/{person_id}/connection:
+    get:
+      summary: Get connections for a given person identified by person_id.
+      description: Returns list of connections.
+      parameters:
+        - name: distance
+          in: query
+          description: Proximity to a given user in meters
+          required: false
+          schema:
+            type: string
+            minimum: 1
+        - name: end_date
+          in: query
+          description: Upper bound of date range
+          required: true
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          description: Upper bound of date range
+          required: true
+          schema:
+            type: string
+        - name: person_id
+          in: path
+          description: ID of person to return connections of
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connections'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Person not found
+components:
+  schemas:
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 29
+        person_id:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        longitude:
+          type: string
+          example: "37.553441"
+        latitude:
+          type: string
+          example: "-122.290524"
+        creation_time:
+          type: string
+          example: "2020-08-18T10:37:06"
+    Locations:
+      description: List of Location objects
+      type: array
+      items:
+        $ref: '#/components/schemas/Location'
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          example: 1
+        first_name:
+          type: string
+          example: "Bob"
+        last_name:
+          type: string
+          example: "Baker"
+        company_name:
+          type: string
+          example: "My Company"
+    Persons:
+      description: List of Person objects
+      type: array
+      items:
+        $ref: '#/components/schemas/Person'
+    Connection:
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/Location'
+        person:
+          $ref: '#/components/schemas/Person'
+    Connections:
+      description: List of Connection objects
+      type: array
+      items:
+        $ref: '#/components/schemas/Connection'

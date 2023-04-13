@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+
+message ConnectionList {
+    message  ConnectionMsg {
+        message PersonMsg {
+            uint32 id = 1;
+            string first_name = 2;
+            string last_name = 3;
+            string company_name = 4;
+        }
+
+        message LocationMsg {
+            uint32 id = 1;
+            uint32 person_id = 2;
+            string coordinate = 3;
+            string creation_time = 5;
+            string _wkt_shape = 6;
+        }
+
+        LocationMsg location = 1;
+        PersonMsg person = 2;
+    }
+
+    repeated ConnectionMsg connections = 1;
+}
+
+
+message ConnectionQuery {
+    uint32 person = 1;
+    optional string start_date = 2;
+    optional string end_date = 3;
+    optional uint32 distance = 4;
+}
+
+
+service ConnectionsService {
+    rpc person_contacts(ConnectionQuery) returns (ConnectionList);
+}

@@ -1,0 +1,21 @@
+---
+title: Original Design
+---
+graph TD
+    USER((User)) --> | REST | PERSONS
+    USER((User)) --> | REST | LOCATIONS
+    UI(Frontend) --> | REST | PERSONS(Persons)
+    UI --> | REST | CONNECTIONS(Connections)
+    PERSONS --> DBP(Persons Table)
+    LOCATIONS(Locations) --> DBL(Locations Table)
+    CONNECTIONS --> | PERSONS
+    CONNECTIONS --> DBL
+    subgraph AI container
+        PERSONS
+        LOCATIONS
+        CONNECTIONS
+    end
+    subgraph Database
+        DBL
+        DBP
+    end
