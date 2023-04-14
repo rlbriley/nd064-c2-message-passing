@@ -1,3 +1,4 @@
+import os
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, List
@@ -7,9 +8,38 @@ from models import Connection, Location, Person
 from schemas import ConnectionSchema, LocationSchema, PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text, func
+from sqlalchemy import create_engine
+from sqlalchemy.engine import URL
+from sqlalchemy.orm import sessionmaker
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("grpc-connections")
+
+DB_USERNAME = os.environ["DB_USERNAME"]
+DB_PASSWORD = os.environ["DB_PASSWORD"]
+DB_HOST = os.environ["DB_HOST"]
+DB_PORT = os.environ["DB_PORT"]
+DB_NAME = os.environ["DB_NAME"]
+
+#Try using SQLAlchemy like the original code.....
+
+url = URL.create(
+    drivername="postgresql",
+    username=DB_USERNAME,
+    password=DB_PASSWORD,
+    port=DB_PORT,
+    host=DB_HOST,
+    database=DB_NAME
+)
+
+def get_engine():
+    engine = create_engine(url)
+    return engine
+
+def get_session():
+    engine = get_engine()
+    session = sessionmaker(bind=engine)
+    return session
 
 
 class ConnectionService:
