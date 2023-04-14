@@ -95,7 +95,7 @@ class ConnectionService:
                 exposed_lat,
                 exposed_long,
                 exposed_time,
-            ) in engine.connect().engine.execute(query, **line):
+            ) in engine.connect().execute(query, **line):
                 location = Location(
                     id=location_id,
                     person_id=exposed_person_id,
