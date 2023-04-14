@@ -11,6 +11,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import orm
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Mapped
 
 from dataclasses import dataclass
 
@@ -140,7 +141,7 @@ class Location(Base):
     person_id = Column(Integer, ForeignKey(Person.id), nullable=False)
     coordinate = Column(Geometry("POINT"), nullable=False)
     creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
-    _wkt_shape: str = None
+    _wkt_shape: Mapped[str] = None
 
     @property
     def wkt_shape(self) -> str:
