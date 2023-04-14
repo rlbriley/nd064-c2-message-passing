@@ -8,7 +8,7 @@ from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 from sqlalchemy import create_engine
 from sqlalchemy import orm
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Mapped
 
@@ -38,7 +38,7 @@ connection = engine.connect()
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 logger.info(f"Services Initialization done")
 
-class Base(DeclarativeBase):
+class Base(declarative_base):
     __allow_unmapped__ = True
 
 
