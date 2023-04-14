@@ -47,7 +47,7 @@ DB_NAME = os.environ["DB_NAME"]
 
 engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
-print(f"Services Initialization done")
+logger.info(f"Services Initialization done")
 
 class Base(DeclarativeBase):
     pass
@@ -69,6 +69,8 @@ class ConnectionService:
         ).filter(Location.creation_time < end_date).filter(
             Location.creation_time >= start_date
         ).all()
+
+        logger.info(f"Locations: {locations}")
 
         # Cache all users in memory for quick lookup
         person_map: Dict[str, Person] = {person.id: person for person in ConnectionService.retrieve_allpersons()}
@@ -118,6 +120,8 @@ class ConnectionService:
                         person=person_map[exposed_person_id], location=location,
                     )
                 )
+
+        logger.info(f"result: {result}")
 
         return result
 

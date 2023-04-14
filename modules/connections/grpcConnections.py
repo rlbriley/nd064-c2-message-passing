@@ -50,12 +50,12 @@ logger = logging.getLogger("grpc-connections")
 class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     def person_contacts(self, request, context):
 
-        print(f"Request: {request}")
-        print(f"Context: {context}")
+        logger.info(f"Request: {request}")
+        logger.info(f"Context: {context}")
 
-        result = ConnectionService.find_contacts(request.person, request.start_data, request.end_data, request.meters)
+        result = ConnectionService.find_contacts(request.person, request.start_date, request.end_date, request.distance)
 
-        print(f"Result: {result}")
+        logger.info(f"Result: {result}")
 
     #     loc = connections_pb2.ConnectionList.ConnectionMsg.LocationMsg()
     #     loc.id = 1234
@@ -75,7 +75,7 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         connList = connections_pb2.ConnectionList()
         # connList.connections.append(connMsg)
 
-        print(f"Response: {connList}")
+        logger.info(f"Response: {connList}")
 
         return connList
 
