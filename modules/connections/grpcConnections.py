@@ -9,7 +9,7 @@ import connections_pb2
 import connections_pb2_grpc
 import logging
 import psycopg2
-from datetime import datetime
+from datetime import datetime, date
 from services import ConnectionService
 
 
@@ -23,7 +23,9 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         logger.info(f"Context: {context}")
 
         # result = ConnectionService.find_contacts(request.person, datetime.fromisoformat(request.start_date), datetime.fromisoformat(request.end_date), request.distance)
-        result = ConnectionService.find_contacts(request.person, request.start_date, request.end_date, request.distance)
+        sdate: datetime = date.fromisoformat(request.start_date)
+        edate: datetime = date.fromisoformat(request.end_date)
+        result = ConnectionService.find_contacts(request.person, sdate, edate, request.distance)
 
         logger.info(f"Result: {result}")
 

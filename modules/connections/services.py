@@ -50,6 +50,7 @@ class ConnectionService:
     @staticmethod
     def find_contacts(person_id: int, start_date: datetime, end_date: datetime, meters=5
     ) -> List[Connection]:
+        logger.info(f"start_date type: {type(start_date)} end_date type: {type(end_date)}")
         """
         Finds all Person who have been within a given distance of a given Person within a date range.
 
