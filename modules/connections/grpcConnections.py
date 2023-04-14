@@ -10,7 +10,6 @@ import connections_pb2_grpc
 import logging
 import psycopg2
 import services
-from sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import sessionmaker
@@ -55,6 +54,11 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     def person_contacts(self, request, context):
 
         print(f"Request: {request}")
+        print(f"Context: {context}")
+
+        result = services.ConnectionService.find_contacts(request.person, request.start_data, request.end_data, request.meters)
+
+        print(f"Result: {result}")
 
     #     loc = connections_pb2.ConnectionList.ConnectionMsg.LocationMsg()
     #     loc.id = 1234
@@ -62,8 +66,6 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     #     loc.coordinate = "coordinate"
     #     loc.creation_time = "Creation"
     #     loc._wkt_shape = "SHAPE"
-        result = services.ConnectionService.find_contacts(request.person, request.start_data, request.end_data, request.meters)
-        print(f"Result: {result}")
 
     #     per = connections_pb2.ConnectionList.ConnectionMsg.PersonMsg()
     #     per.id = request.person
