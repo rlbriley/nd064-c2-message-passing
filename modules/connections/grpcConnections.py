@@ -23,7 +23,7 @@ DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
 
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger("udaconnect-grpc-connections")
+logger = logging.getLogger("grpc-connections")
 
 #Try using SQLAlchemy like the original code.....
 
