@@ -44,19 +44,8 @@ url = URL.create(
     database=DB_NAME
 )
 
-# def get_engine():
-#     engine = create_engine(url)
-#     return engine
-
-# def get_session():
-#     engine = get_engine()
-#     session = orm.scopen_session(orm.sessionmaker())(bind=engine)
-#     return session
-global engine
-global session
-global Base
 engine = create_engine(url)
-session = orm.scopen_session(orm.sessionmaker())(bind=engine)
+session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 Base = declarative_base()
 Base.metadata.bind = engine
 print(f"Services Initialization done")
