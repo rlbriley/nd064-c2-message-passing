@@ -11,12 +11,9 @@ from shapely.geometry.point import Point
 from sqlalchemy import BigInteger, Column, Date, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.ext.hybrid import hybrid_property
-from services import engine
+import services
 
-Base = declarative_base()
-Base.metadata.bind = engine
-
-class Person(Base):
+class Person(services.Base):
     __tablename__ = "person"
 
     id = Column(Integer, primary_key=True)
@@ -25,7 +22,7 @@ class Person(Base):
     company_name = Column(String, nullable=False)
 
 
-class Location(Base):
+class Location(services.Base):
     __tablename__ = "location"
 
     id = Column(BigInteger, primary_key=True)

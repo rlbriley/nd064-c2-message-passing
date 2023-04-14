@@ -8,8 +8,9 @@ from schemas import ConnectionSchema, LocationSchema, PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text, func
 from sqlalchemy import create_engine
-from sqlalchemy import orm
 from sqlalchemy.engine import URL
+from sqlalchemy import orm
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 logging.basicConfig(level=logging.WARNING)
@@ -32,17 +33,20 @@ url = URL.create(
     database=DB_NAME
 )
 
-def get_engine():
-    engine = create_engine(url)
-    return engine
+# def get_engine():
+#     engine = create_engine(url)
+#     return engine
 
 # def get_session():
 #     engine = get_engine()
 #     session = orm.scopen_session(orm.sessionmaker())(bind=engine)
 #     return session
 
-engine = get_engine()
+engine = create_engine(url)
 session = orm.scopen_session(orm.sessionmaker())(bind=engine)
+Base = declarative_base()
+Base.metadata.bind = engine
+
 
 class ConnectionService:
     @staticmethod
