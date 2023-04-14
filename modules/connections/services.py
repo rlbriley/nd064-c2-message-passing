@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 
 from geoalchemy2.functions import ST_AsText, ST_Point
-from sqlalchemy.sql import text, func
+from sqlalchemy.sql import text
 from sqlalchemy import create_engine
 from sqlalchemy import orm
 from sqlalchemy.orm import DeclarativeBase
@@ -95,7 +95,7 @@ class ConnectionService:
                 exposed_lat,
                 exposed_long,
                 exposed_time,
-            ) in engine.connect().execute(query, **line):
+            ) in engine.execute(query, **line):
                 location = Location(
                     id=location_id,
                     person_id=exposed_person_id,
