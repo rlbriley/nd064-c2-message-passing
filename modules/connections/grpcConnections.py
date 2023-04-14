@@ -9,6 +9,13 @@ import connections_pb2
 import connections_pb2_grpc
 import logging
 import psycopg2
+from services import ConnectionService
+from sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.engine import URL
+from sqlalchemy.orm import sessionmaker
+
+
 
 DB_USERNAME = os.environ["DB_USERNAME"]
 DB_PASSWORD = os.environ["DB_PASSWORD"]
@@ -19,7 +26,29 @@ DB_NAME = os.environ["DB_NAME"]
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("udaconnect-grpc-connections")
 
-conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
+#Try using SQLAlchemy like the original code.....
+
+url = URL.create(
+    drivername="postgresql",
+    username=DB_USERNAME,
+    password=DB_PASSWORD,
+    port=DB_PORT,
+    host=DB_HOST,
+    database=DB_NAME
+)
+
+def get_engine():
+    engine = create_engine(url)
+    return engine
+
+def get_session():
+    engine = get_engine()
+    session = sessionmaker(bind=engine)
+    return session
+
+#db = SQLAlchemy()
+#
+# conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
 #conn = psycopg2.connect(database="geoconnections", user="ct_admin", password="wowimsosecure", host="10.98.244.16", port="5432")
 
 class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
@@ -101,16 +130,15 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         #         }
         #     )
 
-        # query = text(
-        #     """
-        # SELECT  person_id, id, ST_X(coordinate), ST_Y(coordinate), creation_time
-        # FROM    location
-        # WHERE   ST_DWithin(coordinate::geography,ST_SetSRID(ST_MakePoint(:latitude,:longitude),4326)::geography, :meters)
-        # AND     person_id != :person_id
-        # AND     TO_DATE(:start_date, 'YYYY-MM-DD') <= creation_time
-        # AND     TO_DATE(:end_date, 'YYYY-MM-DD') > creation_time;
-        # """
-        # )
+        query = f"""
+                SELECT  person_id, id, ST_X(coordinate), ST_Y(coordinate), creation_time
+                FROM    location
+                WHERE   ST_DWithin(coordinate::geography,ST_SetSRID(ST_MakePoint(:latitude,:longitude),4326)::geography, :meters)
+                AND     person_id != :person_id
+                AND     TO_DATE(:start_date, 'YYYY-MM-DD') <= creation_time
+                AND     TO_DATE(:end_date, 'YYYY-MM-DD') > creation_time;
+                """
+
         # result: List[Connection] = []
         # for line in tuple(data):
         #     for (
