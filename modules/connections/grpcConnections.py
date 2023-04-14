@@ -27,25 +27,28 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         edate: datetime = date.fromisoformat(request.end_date)
         result = ConnectionService.find_contacts(request.person, sdate, edate, request.distance)
 
-        logger.info(f"Result: {result}")
-
-    #     loc = connections_pb2.ConnectionList.ConnectionMsg.LocationMsg()
-    #     loc.id = 1234
-    #     loc.person_id =  request.person
-    #     loc.coordinate = "coordinate"
-    #     loc.creation_time = "Creation"
-    #     loc._wkt_shape = "SHAPE"
-
-    #     per = connections_pb2.ConnectionList.ConnectionMsg.PersonMsg()
-    #     per.id = request.person
-    #     per.first_name = "FName"
-    #     per.last_name = "LName"
-    #     per.company_name = "CName"
-
-    #     connMsg = connections_pb2.ConnectionList.ConnectionMsg(location=loc, person=per)
+#        logger.info(f"Result: {result}")
 
         connList = connections_pb2.ConnectionList()
-        # connList.connections.append(connMsg)
+        for conn in result:
+            logger.debug( f"conn: {conn}")
+
+            loc = connections_pb2.ConnectionList.ConnectionMsg.LocationMsg()
+            loc.id = conn.location.id
+            loc.person_id =  conn.location.person_id
+            loc.coordinate = conn.location.coordinate
+            loc.creation_time = conn.location.creation_time
+            loc._wkt_shape = conn.location._wkt_shape
+
+            per = connections_pb2.ConnectionList.ConnectionMsg.PersonMsg()
+            per.id = conn.person.id
+            per.first_name = conn.person.first_name
+            per.last_name = conn.person.last_name
+            per.company_name = conn.person.company_name
+
+            connMsg = connections_pb2.ConnectionList.ConnectionMsg(location=loc, person=per)
+
+            connList.connections.append(connMsg)
 
         logger.info(f"Response: {connList}")
 
