@@ -41,11 +41,14 @@ url = URL.create(
 #     engine = get_engine()
 #     session = orm.scopen_session(orm.sessionmaker())(bind=engine)
 #     return session
-
+global engine
+global session
+global Base
 engine = create_engine(url)
 session = orm.scopen_session(orm.sessionmaker())(bind=engine)
 Base = declarative_base()
 Base.metadata.bind = engine
+print(f"Services Initialization done")
 
 
 class ConnectionService:
