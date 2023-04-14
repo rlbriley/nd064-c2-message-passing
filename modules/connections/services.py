@@ -89,7 +89,7 @@ class ConnectionService:
 
         query = text(
             """
-        SELECT  person_id, id, ST_X(coordinate), ST_Y(coordinate), creation_time
+        SELECT  person_id, id, ST_X(coordinate), ST_Y(coordinate), creation_time, coordinate
         FROM    location
         WHERE   ST_DWithin(coordinate::geography,ST_SetSRID(ST_MakePoint(:latitude,:longitude),4326)::geography, :meters)
         AND     person_id != :person_id
@@ -109,11 +109,13 @@ class ConnectionService:
                 exposed_lat,
                 exposed_long,
                 exposed_time,
+                coord,
             ) in connection.execute(query, **line):
                 location = Location(
                     id=location_id,
                     person_id=exposed_person_id,
                     creation_time=exposed_time,
+                    coordinate=coord,
                 )
                 location.set_wkt_with_coords(exposed_lat, exposed_long)
 
