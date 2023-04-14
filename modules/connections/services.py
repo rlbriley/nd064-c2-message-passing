@@ -9,7 +9,7 @@ from sqlalchemy.sql import text, func
 from sqlalchemy import create_engine
 #from sqlalchemy.engine import URL
 from sqlalchemy import orm
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
 
 from dataclasses import dataclass
@@ -46,9 +46,10 @@ DB_NAME = os.environ["DB_NAME"]
 
 engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
-Base = declarative_base()
-Base.metadata.bind = engine
 print(f"Services Initialization done")
+
+class Base(DeclarativeBase):
+    pass
 
 
 class ConnectionService:
