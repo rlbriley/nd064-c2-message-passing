@@ -36,7 +36,9 @@ DB_NAME = os.environ["DB_NAME"]
 engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}", echo=True)
 connection = engine.connect()
 #session = orm.scoped_session(orm.sessionmaker())(bind=engine)
-session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine)
+session = Session()
+
 logger.info(f"Services Initialization done")
 
 # class Base(DeclarativeBase):
