@@ -78,6 +78,8 @@ class ConnectionService:
                 }
             )
 
+        logger.debug(f"data: {data}")
+
         query = text(
             """
         SELECT  person_id, id, ST_X(coordinate), ST_Y(coordinate), creation_time
@@ -92,6 +94,7 @@ class ConnectionService:
         logger.debug(f"query: {query}")
 
         result: List[Connection] = []
+
         for line in tuple(data):
             for (
                 exposed_person_id,
