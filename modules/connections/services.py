@@ -50,7 +50,7 @@ session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 logger.info(f"Services Initialization done")
 
 class Base(DeclarativeBase):
-    pass
+    __allow_unmapped__ = True
 
 
 class ConnectionService:
@@ -145,7 +145,7 @@ class Location(Base):
     person_id = Column(Integer, ForeignKey(Person.id), nullable=False)
     coordinate = Column(Geometry("POINT"), nullable=False)
     creation_time = Column(DateTime, nullable=False, default=datetime.utcnow)
-    _wkt_shape: Mapped[str] = None
+    _wkt_shape: str = None
 
     @property
     def wkt_shape(self) -> str:
