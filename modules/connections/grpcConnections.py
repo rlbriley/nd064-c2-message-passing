@@ -38,7 +38,7 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
             loc.person_id =  conn.location.person_id
             if conn.location.coordinate:
                 loc.coordinate = conn.location.coordinate
-            loc.creation_time = conn.location.creation_time
+            loc.creation_time = conn.location.creation_time.isoformat()
             loc._wkt_shape = conn.location._wkt_shape
 
             per = connections_pb2.ConnectionList.ConnectionMsg.PersonMsg()

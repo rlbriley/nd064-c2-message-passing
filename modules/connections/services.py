@@ -125,7 +125,7 @@ class ConnectionService:
                     )
                 )
 
-        logger.info(f"result: {result}")
+        # logger.info(f"result: {result}")
 
         return result
 
