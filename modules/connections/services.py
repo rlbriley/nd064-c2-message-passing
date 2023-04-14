@@ -64,7 +64,8 @@ class ConnectionService:
             Location.creation_time >= start_date
         ).all()
 
-        logger.info(f"Locations: {locations}")
+        for loc in locations:
+            logger.info(f"Loc: {loc}")
 
         # Cache all users in memory for quick lookup
         person_map: Dict[str, Person] = {person.id: person for person in ConnectionService.retrieve_allpersons()}
@@ -83,7 +84,8 @@ class ConnectionService:
                 }
             )
 
-        logger.debug(f"data: {data}")
+        for d in data:
+            logger.debug(f"data: {d}")
 
         query = text(
             """
