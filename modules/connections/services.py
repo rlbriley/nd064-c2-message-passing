@@ -3,7 +3,6 @@ import logging
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from grpcConnections import get_session, get_engine
 from models import Connection, Location, Person
 from schemas import ConnectionSchema, LocationSchema, PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
