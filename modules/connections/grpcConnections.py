@@ -9,7 +9,7 @@ import connections_pb2
 import connections_pb2_grpc
 import logging
 import psycopg2
-import services
+from services import ConnectionService
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import sessionmaker
@@ -56,7 +56,7 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         print(f"Request: {request}")
         print(f"Context: {context}")
 
-        result = services.ConnectionService.find_contacts(request.person, request.start_data, request.end_data, request.meters)
+        result = ConnectionService.find_contacts(request.person, request.start_data, request.end_data, request.meters)
 
         print(f"Result: {result}")
 
