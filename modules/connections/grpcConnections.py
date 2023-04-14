@@ -22,7 +22,8 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         logger.info(f"Request: {request}")
         logger.info(f"Context: {context}")
 
-        result = ConnectionService.find_contacts(request.person, datetime.fromisoformat(request.start_date), datetime.fromisoformat(request.end_date), request.distance)
+        # result = ConnectionService.find_contacts(request.person, datetime.fromisoformat(request.start_date), datetime.fromisoformat(request.end_date), request.distance)
+        result = ConnectionService.find_contacts(request.person, request.start_date, request.end_date, request.distance)
 
         logger.info(f"Result: {result}")
 
