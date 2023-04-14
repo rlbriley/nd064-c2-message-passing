@@ -8,9 +8,9 @@ from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 from sqlalchemy import create_engine
 from sqlalchemy import orm
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import Mapped
 
 from dataclasses import dataclass
 
@@ -33,13 +33,15 @@ DB_HOST = os.environ["DB_HOST"]
 DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
 
-engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}", echo=True)
 connection = engine.connect()
-session = orm.scoped_session(orm.sessionmaker())(bind=engine)
+#session = orm.scoped_session(orm.sessionmaker())(bind=engine)
+session = sessionmaker(bind=engine)
 logger.info(f"Services Initialization done")
 
-class Base(declarative_base):
-    __allow_unmapped__ = True
+# class Base(DeclarativeBase):
+#     __allow_unmapped__ = True
+Base = declarative_base()
 
 
 class ConnectionService:
