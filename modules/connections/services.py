@@ -24,7 +24,7 @@ from geoalchemy2.types import Geometry as GeometryType
 from marshmallow import Schema, fields
 from marshmallow_sqlalchemy.convert import ModelConverter as BaseModelConverter
 
-logging.basicConfig(level=logging.TRACE)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("grpc-connections")
 
 DB_USERNAME = os.environ["DB_USERNAME"]
