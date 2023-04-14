@@ -24,7 +24,7 @@ from geoalchemy2.types import Geometry as GeometryType
 from marshmallow import Schema, fields
 from marshmallow_sqlalchemy.convert import ModelConverter as BaseModelConverter
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("grpc-connections")
 
 DB_USERNAME = os.environ["DB_USERNAME"]
@@ -34,6 +34,7 @@ DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
 
 engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+connection = engine.connect()
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 logger.info(f"Services Initialization done")
 
@@ -95,7 +96,7 @@ class ConnectionService:
                 exposed_lat,
                 exposed_long,
                 exposed_time,
-            ) in engine.execute(query, **line):
+            ) in connection.execute(query, **line):
                 location = Location(
                     id=location_id,
                     person_id=exposed_person_id,
