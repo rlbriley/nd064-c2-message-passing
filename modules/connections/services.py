@@ -133,7 +133,7 @@ class Person(Base):
     company_name = Column(String, nullable=False)
 
     def __repr__(self):
-        return f"[id: {self.id}, first_name: {self.first_name}, last_name: {self.last_name}, company_name: {self.company_name}]"
+        return f"\{id: {self.id}, first_name: {self.first_name}, last_name: {self.last_name}, company_name: {self.company_name}\}"
 
 
 class Location(Base):
@@ -173,7 +173,7 @@ class Location(Base):
         return coord_text[coord_text.find("(") + 1 : coord_text.find(" ")]
 
     def __repr__(self):
-        return f"[id: {self.id}, person_id: {self.person_id}, coordinate: {self.coordinate}, creation_time: {self.creation_time}, _wkt_shape: {self._wkt_shape}]"
+        return f"\{id: {self.id}, person_id: {self.person_id}, coordinate: {self.coordinate}, creation_time: {self.creation_time}, _wkt_shape: {self._wkt_shape}\}]"
 
 @dataclass
 class Connection:
