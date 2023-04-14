@@ -8,6 +8,7 @@ from schemas import ConnectionSchema, LocationSchema, PersonSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text, func
 from sqlalchemy import create_engine
+from sqlalchemy import orm
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import sessionmaker
 
@@ -35,11 +36,13 @@ def get_engine():
     engine = create_engine(url)
     return engine
 
-def get_session():
-    engine = get_engine()
-    session = sessionmaker(bind=engine)
-    return session
+# def get_session():
+#     engine = get_engine()
+#     session = orm.scopen_session(orm.sessionmaker())(bind=engine)
+#     return session
 
+engine = get_engine()
+session = orm.scopen_session(orm.sessionmaker())(bind=engine)
 
 class ConnectionService:
     @staticmethod
@@ -52,7 +55,7 @@ class ConnectionService:
         large datasets. This is by design: what are some ways or techniques to help make this data integrate more
         smoothly for a better user experience for API consumers?
         """
-        locations: List = get_session().query(Location).filter(
+        locations: List = session.query(Location).filter(
             Location.person_id == person_id
         ).filter(Location.creation_time < end_date).filter(
             Location.creation_time >= start_date
@@ -93,7 +96,7 @@ class ConnectionService:
                 exposed_lat,
                 exposed_long,
                 exposed_time,
-            ) in get_engine().connect().engine.execute(query, **line):
+            ) in engine.connect().engine.execute(query, **line):
                 location = Location(
                     id=location_id,
                     person_id=exposed_person_id,
@@ -111,4 +114,4 @@ class ConnectionService:
 
     @staticmethod
     def retrieve_allpersons() -> List[Person]:
-        return get_session().query(Person).order_by(Person.id.asc()).all()
+        return session.query(Person).order_by(Person.id.asc()).all()
