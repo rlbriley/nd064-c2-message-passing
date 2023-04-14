@@ -7,7 +7,6 @@ from typing import Dict, List
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text, func
 from sqlalchemy import create_engine
-#from sqlalchemy.engine import URL
 from sqlalchemy import orm
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
@@ -33,17 +32,6 @@ DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_HOST = os.environ["DB_HOST"]
 DB_PORT = os.environ["DB_PORT"]
 DB_NAME = os.environ["DB_NAME"]
-
-#Try using SQLAlchemy like the original code.....
-
-# url = URL.create(
-#     drivername="postgresql",
-#     username=DB_USERNAME,
-#     password=DB_PASSWORD,
-#     port=DB_PORT,
-#     host=DB_HOST,
-#     database=DB_NAME
-# )
 
 engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)

@@ -9,43 +9,12 @@ import connections_pb2
 import connections_pb2_grpc
 import logging
 import psycopg2
+from datetime import datetime
 from services import ConnectionService
 
 
-
-# DB_USERNAME = os.environ["DB_USERNAME"]
-# DB_PASSWORD = os.environ["DB_PASSWORD"]
-# DB_HOST = os.environ["DB_HOST"]
-# DB_PORT = os.environ["DB_PORT"]
-# DB_NAME = os.environ["DB_NAME"]
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("grpc-connections")
-
-#Try using SQLAlchemy like the original code.....
-
-# url = URL.create(
-#     drivername="postgresql",
-#     username=DB_USERNAME,
-#     password=DB_PASSWORD,
-#     port=DB_PORT,
-#     host=DB_HOST,
-#     database=DB_NAME
-# )
-
-# def get_engine():
-#     engine = create_engine(url)
-#     return engine
-
-# def get_session():
-#     engine = get_engine()
-#     session = sessionmaker(bind=engine)
-#     return session
-
-#db = SQLAlchemy()
-#
-# conn = psycopg2.connect(database=DB_NAME, user=DB_USERNAME, password=DB_PASSWORD, host=DB_HOST, port=DB_PORT)
-#conn = psycopg2.connect(database="geoconnections", user="ct_admin", password="wowimsosecure", host="10.98.244.16", port="5432")
 
 class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     def person_contacts(self, request, context):
@@ -53,7 +22,7 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         logger.info(f"Request: {request}")
         logger.info(f"Context: {context}")
 
-        result = ConnectionService.find_contacts(request.person, request.start_date, request.end_date, request.distance)
+        result = ConnectionService.find_contacts(request.person, datetime.fromisoformat(request.start_date), datetime.fromisoformat(request.end_date), request.distance)
 
         logger.info(f"Result: {result}")
 
