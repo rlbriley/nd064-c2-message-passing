@@ -1,6 +1,5 @@
 #!/sur/bin/env python3
 
-import os
 import time
 from concurrent import futures
 
@@ -8,7 +7,6 @@ import grpc
 import connections_pb2
 import connections_pb2_grpc
 import logging
-import psycopg2
 from datetime import datetime, date
 from services import ConnectionService
 
@@ -20,14 +18,11 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     def person_contacts(self, request, context):
 
         logger.info(f"Request: {request}")
-        logger.info(f"Context: {context}")
 
         # result = ConnectionService.find_contacts(request.person, datetime.fromisoformat(request.start_date), datetime.fromisoformat(request.end_date), request.distance)
         sdate: datetime = date.fromisoformat(request.start_date)
         edate: datetime = date.fromisoformat(request.end_date)
         result = ConnectionService.find_contacts(request.person, sdate, edate, request.distance)
-
-#        logger.info(f"Result: {result}")
 
         connList = connections_pb2.ConnectionList()
         for conn in result:
@@ -51,7 +46,7 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
 
             connList.connections.append(connMsg)
 
-        logger.info(f"Response: {connList}")
+        logger.debug(f"Response: {connList}")
 
         return connList
 

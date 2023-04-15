@@ -1,15 +1,15 @@
 from __future__ import annotations
 import os
 import logging
+
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from geoalchemy2.functions import ST_AsText, ST_Point
+#from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 from sqlalchemy import create_engine
-from sqlalchemy import orm
+#from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import sessionmaker
 
 from dataclasses import dataclass
@@ -17,12 +17,12 @@ from dataclasses import dataclass
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import to_shape
 from shapely.geometry.point import Point
-from sqlalchemy import BigInteger, Column, Date, DateTime, ForeignKey, Integer, String
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, Integer, String
+#from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.ext.hybrid import hybrid_property
-from geoalchemy2.types import Geometry as GeometryType
+#from geoalchemy2.types import Geometry as GeometryType
 from marshmallow import Schema, fields
-from marshmallow_sqlalchemy.convert import ModelConverter as BaseModelConverter
+#from marshmallow_sqlalchemy.convert import ModelConverter as BaseModelConverter
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("grpc-connections")
@@ -35,14 +35,11 @@ DB_NAME = os.environ["DB_NAME"]
 
 engine = create_engine(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}", echo=True)
 connection = engine.connect()
-#session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
 logger.info(f"Services Initialization done")
 
-# class Base(DeclarativeBase):
-#     __allow_unmapped__ = True
 Base = declarative_base()
 
 
