@@ -61,10 +61,10 @@ def get():
 
     return results
 
-# healthz REST route.
+# health REST route.
 # Will return "OK - healthy" if the application is running
 @app.route("/health")
-def healthz():
+def health():
     '''
     health REST route.
     Will return "OK - healthy" if the application is running
@@ -78,3 +78,6 @@ def healthz():
              json.dumps(response.json))
     return response
 
+# start the application on port 30001
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port='30001')
