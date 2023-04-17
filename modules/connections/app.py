@@ -35,19 +35,19 @@ stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
 @app.route("/api/persons/<person_id>/connection", methods = ['GET'])
 def get(person_id):
     logger.debug(f"request: {request}")
-    start_date: datetime = datetime.strptime(
+    sdate: datetime = datetime.strptime(
         request.args["start_date"], DATE_FORMAT
     )
-    end_date: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
-    distance = request.args.get("distance", 5, type=int)
+    edate: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
+    dist = request.args.get("distance", 5, type=int)
 
-    logger.debug(f"distance: {distance}")
+    logger.debug(f"distance: {dist}")
 
     connQuery = connections_pb2.ConnectionQuery(
-        person_id,
-        start_date,
-        end_date,
-        distance )
+        person=person_id,
+        start_date=sdate,
+        end_date=edate,
+        distance=dist )
 
     logger.deubg(f"Sending request to gRPC find_contacts({connQuery})")
 
