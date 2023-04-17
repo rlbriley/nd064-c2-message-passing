@@ -49,7 +49,7 @@ def get(person_id):
 
     logger.debug(f"Sending request to gRPC find_contacts({connQuery})")
 
-    results = stub.find_contacts(connQuery)
+    results = stub.person_contacts(connQuery)
 
     logger.debug(f"Results: {results}")
 
