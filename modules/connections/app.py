@@ -32,12 +32,7 @@ channel = grpc.insecure_channel("localhost:5005")
 stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
 
 
-@app.route("/persons/<person_id>/connection", methods = ['GET'])
-# @app.param("start_date", "Lower bound of date range", _in="query")
-# @app.param("end_date", "Upper bound of date range", _in="query")
-# @app.param("distance", "Proximity to a given user in meters", _in="query")
-# class ConnectionDataResource(Resource):
-#    @responds(schema=ConnectionSchema, many=True)
+@app.route("/api/persons/<person_id>/connection", methods = ['GET'])
 def get():
     person_id = request.args.get("person_id")
     logger.debug(f"request: {request}")
