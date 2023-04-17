@@ -10,4 +10,4 @@ RUN pip install -r /connections/requirements.txt
 EXPOSE 5000
 
 COPY modules/connections/ /connections/
-CMD ["python3", "grpcConnections.py"]
+CMD ["flask", "run", "--host", "0.0.0.0"]

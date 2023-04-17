@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: modules/connections Build and Push
+name: modules/connections-grpc Build and Push
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'modules/connections/**'
+      - 'modules/connections-grpc/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -39,11 +39,11 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./modules/connections/Dockerfile
+          file: ./modules/connections-grpc/Dockerfile
           platforms: linux/amd64
           push: true
           # The image gets pushed with this tag.
-          tags: rbriley/udaconnect-connections:latest
+          tags: rbriley/udaconnect-grpc-connections:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
