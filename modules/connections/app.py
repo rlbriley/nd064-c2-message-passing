@@ -39,7 +39,9 @@ def get(person_id):
         request.args["start_date"], DATE_FORMAT
     )
     end_date: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
-    distance: int = request.args.get("distance", 5)
+    distance = request.args.get("distance", 5, type=int)
+
+    logger.debug(f"distance: {distance}")
 
     connQuery = connections_pb2.ConnectionQuery(
         person_id,
