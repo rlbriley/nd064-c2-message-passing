@@ -27,12 +27,9 @@ app = Flask(__name__)
 
 print("Sending sample payload...")
 
+# Create stub to send gRPC message.
 channel = grpc.insecure_channel("localhost:5005")
 stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
-
-# Initialize gRPC server
-server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
-connections_pb2_grpc.add_ConnectionsServiceServicer_to_server(ConnectionsServicer(), server)
 
 
 @app.route("/persons/<person_id>/connection")
@@ -54,6 +51,8 @@ class ConnectionDataResource(Resource):
             start_date,
             end_date,
             distance )
+
+        logger.deubg(f"Sending request to gRPC find_contacts({connQuery})")
 
         results = stub.find_contacts(connQuery)
 
