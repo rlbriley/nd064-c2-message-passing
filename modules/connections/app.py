@@ -44,7 +44,7 @@ def get(person_id):
     logger.debug(f"distance: {dist}")
 
     connQuery = connections_pb2.ConnectionQuery(
-        person=person_id,
+        person=int(person_id),
         start_date=sdate,
         end_date=edate,
         distance=dist )
