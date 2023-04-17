@@ -47,11 +47,11 @@ def get(person_id):
         end_date=edate,
         distance=dist )
 
-    logger.deubg(f"Sending request to gRPC find_contacts({connQuery})")
+    logger.debug(f"Sending request to gRPC find_contacts({connQuery})")
 
     results = stub.find_contacts(connQuery)
 
-    logger.deubg(f"Results: {results}")
+    logger.debug(f"Results: {results}")
 
     return results
 
