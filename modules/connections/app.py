@@ -35,10 +35,8 @@ stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
 @app.route("/api/persons/<person_id>/connection", methods = ['GET'])
 def get(person_id):
     logger.debug(f"request: {request}")
-    sdate: datetime = datetime.strptime(
-        request.args["start_date"], DATE_FORMAT
-    )
-    edate: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
+    sdate: str = request.args["start_date"]
+    edate: str = request.args["end_date"]
     dist = request.args.get("distance", 5, type=int)
 
     logger.debug(f"distance: {dist}")
