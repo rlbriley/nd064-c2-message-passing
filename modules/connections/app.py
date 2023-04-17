@@ -32,30 +32,31 @@ channel = grpc.insecure_channel("localhost:5005")
 stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
 
 
-@app.route("/persons/<person_id>/connection")
-@app.param("start_date", "Lower bound of date range", _in="query")
-@app.param("end_date", "Upper bound of date range", _in="query")
-@app.param("distance", "Proximity to a given user in meters", _in="query")
-class ConnectionDataResource(Resource):
+@app.route("/persons/<person_id>/connection", methods = ['GET'])
+# @app.param("start_date", "Lower bound of date range", _in="query")
+# @app.param("end_date", "Upper bound of date range", _in="query")
+# @app.param("distance", "Proximity to a given user in meters", _in="query")
+# class ConnectionDataResource(Resource):
 #    @responds(schema=ConnectionSchema, many=True)
-    def get(self, person_id):
-        logger.debug(f"request: {request}")
-        start_date: datetime = datetime.strptime(
-            request.args["start_date"], DATE_FORMAT
-        )
-        end_date: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
-        distance: Optional[int] = request.args.get("distance", 5)
+def get():
+    person_id = request.args.get("person_id")
+    logger.debug(f"request: {request}")
+    start_date: datetime = datetime.strptime(
+        request.args["start_date"], DATE_FORMAT
+    )
+    end_date: datetime = datetime.strptime(request.args["end_date"], DATE_FORMAT)
+    distance: Optional[int] = request.args.get("distance", 5)
 
-        connQuery = connections_pb2.ConnectionQuery(
-            person_id,
-            start_date,
-            end_date,
-            distance )
+    connQuery = connections_pb2.ConnectionQuery(
+        person_id,
+        start_date,
+        end_date,
+        distance )
 
-        logger.deubg(f"Sending request to gRPC find_contacts({connQuery})")
+    logger.deubg(f"Sending request to gRPC find_contacts({connQuery})")
 
-        results = stub.find_contacts(connQuery)
+    results = stub.find_contacts(connQuery)
 
-        logger.deubg(f"Results: {results}")
+    logger.deubg(f"Results: {results}")
 
-        return results
+    return results
