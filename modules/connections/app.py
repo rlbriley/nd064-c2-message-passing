@@ -33,8 +33,7 @@ stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
 
 
 @app.route("/api/persons/<person_id>/connection", methods = ['GET'])
-def get():
-    person_id = request.args.get("person_id")
+def get(person_id):
     logger.debug(f"request: {request}")
     start_date: datetime = datetime.strptime(
         request.args["start_date"], DATE_FORMAT
