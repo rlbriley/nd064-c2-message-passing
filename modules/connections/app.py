@@ -60,3 +60,21 @@ def get():
     logger.deubg(f"Results: {results}")
 
     return results
+
+# healthz REST route.
+# Will return "OK - healthy" if the application is running
+@app.route("/health")
+def healthz():
+    '''
+    health REST route.
+    Will return "OK - healthy" if the application is running
+    '''
+    response = app.response_class(
+        response=json.dumps({"result": "OK - healthy"}),
+        status=200,
+        mimetype='application/json'
+    )
+    logger.info('healthz request successful response=%s',
+             json.dumps(response.json))
+    return response
+
