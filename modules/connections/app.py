@@ -39,8 +39,6 @@ def get(person_id):
     edate: str = request.args["end_date"]
     dist = request.args.get("distance", 5, type=int)
 
-    logger.debug(f"distance: {dist}")
-
     connQuery = connections_pb2.ConnectionQuery(
         person=int(person_id),
         start_date=sdate,
@@ -49,9 +47,11 @@ def get(person_id):
 
     logger.debug(f"Sending request to gRPC find_contacts({connQuery})")
 
-    results = stub.person_contacts(connQuery)
+    contacts = stub.person_contacts(connQuery)
 
-    logger.debug(f"Results: {results}")
+    logger.debug(f"Contacts: {contacts}")
+    # todo convert from ConnectionList to JSON
+    results: str = json.dumps(contacts)
 
     return results
 
