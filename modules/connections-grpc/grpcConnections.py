@@ -19,11 +19,9 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
 
         logger.info(f"Request: {request}")
 
-        # result = ConnectionService.find_contacts(request.person, datetime.fromisoformat(request.start_date), datetime.fromisoformat(request.end_date), request.distance)
-        # sdate: datetime = date.fromisoformat(request.start_date)
-        # edate: datetime = date.fromisoformat(request.end_date)
-        # result = ConnectionService.find_contacts(request.person, sdate, edate, request.distance)
-        result = ConnectionService.find_contacts(request.person, request.start_date, request.end_date, request.distance)
+        sdate: datetime = date.fromisoformat(request.start_date)
+        edate: datetime = date.fromisoformat(request.end_date)
+        result = ConnectionService.find_contacts(request.person, sdate, edate, request.distance)
 
         connList = connections_pb2.ConnectionList()
         for conn in result:
