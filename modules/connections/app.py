@@ -28,7 +28,7 @@ app = Flask(__name__)
 print("Sending sample payload...")
 
 # Create stub to send gRPC message.
-channel = grpc.insecure_channel("grpc-connections:5005")
+channel = grpc.insecure_channel("grpc-connections:30004")
 stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
 
 
