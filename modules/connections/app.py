@@ -5,6 +5,7 @@ from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
 from typing import Optional, List
 from werkzeug.exceptions import abort
+from google.protobuf.json_format import MessageToJson
 
 import time
 from concurrent import futures
@@ -51,7 +52,7 @@ def get(person_id):
 
     logger.debug(f"Contacts: {contacts}")
     # todo convert from ConnectionList to JSON
-    results: str = json.dumps(contacts)
+    results: str = MessageToJson(contacts)
 
     return results
 
