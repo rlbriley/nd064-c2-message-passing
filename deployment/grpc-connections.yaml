@@ -6,7 +6,7 @@ metadata:
   name: grpc-connections
 spec:
   ports:
-  - name: "5005"
+  - name: grpc-port
     port: 5005
     targetPort: 5005
     nodePort: 30004
@@ -35,29 +35,32 @@ spec:
         name: grpc-connections
         imagePullPolicy: Always
         env:
-        - name: DB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_USERNAME
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: DB_PASSWORD
-        - name: DB_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_NAME
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_HOST
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: db-env
-              key: DB_PORT
+          - name: DB_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: db-env
+                key: DB_USERNAME
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: DB_PASSWORD
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: db-env
+                key: DB_NAME
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: db-env
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: db-env
+                key: DB_PORT
+        ports:
+        - containerPort: 5005
+          name: grpc-port
       restartPolicy: Always
