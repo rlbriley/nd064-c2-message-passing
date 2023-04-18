@@ -59,6 +59,7 @@ connections_pb2_grpc.add_ConnectionsServiceServicer_to_server(ConnectionsService
 logger.info("Server starting on port 5005...")
 
 server.add_insecure_port("[::]:5005")
+logger.debug(f"Server: {server}")
 server.start()
 # Keep thread alive
 try:
