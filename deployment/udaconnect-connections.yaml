@@ -63,5 +63,5 @@ spec:
         - name: GRPC_VERBOSITY
           value: "debug"
         - name: GRPC_TRACE
-          value: "call_error,connectivity_state,pick_first,round_robin,glb"
+          value: "connectivity_state"
       restartPolicy: Always
