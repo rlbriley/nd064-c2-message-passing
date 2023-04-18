@@ -60,8 +60,4 @@ spec:
             configMapKeyRef:
               name: db-env
               key: DB_PORT
-        - name: GRPC_VERBOSITY
-          value: "debug"
-        - name: GRPC_TRACE
-          value: "connectivity_state"
       restartPolicy: Always

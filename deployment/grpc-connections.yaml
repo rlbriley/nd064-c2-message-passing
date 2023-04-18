@@ -60,10 +60,6 @@ spec:
               configMapKeyRef:
                 name: db-env
                 key: DB_PORT
-          - name: GRPC_VERBOSITY
-            value: "debug"
-          - name: GRPC_TRACE
-            value: "call_error,connectivity_state,pick_first,round_robin,glb"
         ports:
         - containerPort: 5005
           name: grpc-port
