@@ -34,7 +34,7 @@ class conloc_out:
 
 class connections_out:
     def __init__(self):
-        connections = []
+        self.connections = []
 
     def add(self, loc, conn):
         self.connections.append(conloc_out(loc, conn))
