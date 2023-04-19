@@ -28,9 +28,9 @@ class location_out:
 
 class conloc_out:
     def __init__(self, loc, conn):
-        conloc = []
-        conloc.add(loc)
-        conloc.add(conn)
+        self.conloc = []
+        self.conloc.append(loc)
+        self.conloc.append(conn)
 
 class connections_out:
     def __init__(self):
