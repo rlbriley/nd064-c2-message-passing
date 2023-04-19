@@ -17,7 +17,6 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("grpc-connections")
 
 class location_out(dict):
-
     # Constructor
     def __init__(self, id, pid, ctime, lo, la):
         self['id'] = id
@@ -25,8 +24,6 @@ class location_out(dict):
         self['creation_time'] = ctime
         self['longitude'] = lo
         self['latitude'] = la
-
-#    def toJSON(self):
 
 class loc_per(dict):
     def __init__(self, loc, person):
@@ -86,10 +83,10 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
 
         logger.debug(f"Response: {connList}")
 
-        ooo = json.dumps(conn_list1)
-        logger.debug(f"New Response: \n{ooo}")
+        # ooo = json.dumps(conn_list1)
+        # logger.debug(f"New Response: \n{ooo}")
 
-        return ooo
+        return conn_list1
 
 # Initialize gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
