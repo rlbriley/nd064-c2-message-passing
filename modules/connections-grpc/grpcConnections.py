@@ -1,6 +1,8 @@
 #!/sur/bin/env python3
 
 import time
+import re
+import json
 from concurrent import futures
 
 import grpc
@@ -14,6 +16,29 @@ from services import ConnectionService
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("grpc-connections")
 
+class location_out:
+
+    # Constructor
+    def __init__(self, id, pid, ctime, lo, la):
+        self.id = id
+        self.person_id = pid
+        self.creation_time = ctime
+        self.longitude = lo
+        self.latitude = la
+
+class conloc_out:
+    def __init__(self, loc, conn):
+        conloc = []
+        conloc.add(loc)
+        conloc.add(conn)
+
+class connections_out:
+    def __init__(self):
+        connections = []
+
+    def add(self, loc, conn):
+        self.add(conloc_out(loc, conn))
+
 class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     def person_contacts(self, request, context):
 
@@ -24,6 +49,7 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         result = ConnectionService.find_contacts(request.person, sdate, edate, request.distance)
 
         connList = connections_pb2.ConnectionList()
+        conn_list1 = connections_out()
         for conn in result:
             logger.debug( f"conn: {conn}")
 
@@ -45,10 +71,24 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
 
             connList.connections.append(connMsg)
 
+            l = conn.location
+            pattern_text = r'ST_POINT\(([-\d\.]+)\s+([-\d\.]+)\)'
+            pattern = re.compile(pattern_text)
+            shape = conn.location._wkt_shape
+            logger.debug(f"shape: {shape}")
+            match = pattern.match(shape)
+            lo = match.group(1)
+            la = match.group(2)
+
+            l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
+            conn_list1.add(l1, conn.person)
+
         logger.debug(f"Response: {connList}")
 
-        return connList
+        ooo = json.dumps(conn_list1)
+        logger.debug(f"New Response: \n{ooo}")
 
+        return ooo
 
 # Initialize gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
