@@ -37,7 +37,7 @@ class connections_out:
         connections = []
 
     def add(self, loc, conn):
-        self.add(conloc_out(loc, conn))
+        self.connections.append(conloc_out(loc, conn))
 
 class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     def person_contacts(self, request, context):
