@@ -16,28 +16,29 @@ from services import ConnectionService
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("grpc-connections")
 
-class location_out:
+class location_out(dict):
 
     # Constructor
     def __init__(self, id, pid, ctime, lo, la):
-        self.id = id
-        self.person_id = pid
-        self.creation_time = ctime
-        self.longitude = lo
-        self.latitude = la
+        self['id'] = id
+        self['person_id'] = pid
+        self['creation_time'] = ctime
+        self['longitude'] = lo
+        self['latitude'] = la
 
-class conloc_out:
-    def __init__(self, loc, conn):
-        self.conloc = []
-        self.conloc.append(loc)
-        self.conloc.append(conn)
+#    def toJSON(self):
+
+class loc_per(dict):
+    def __init__(self, loc, person):
+        self['location'] = loc
+        self['person'] = person
 
 class connections_out:
     def __init__(self):
         self.connections = []
 
-    def add(self, loc, conn):
-        self.connections.append(conloc_out(loc, conn))
+    def add(self, loc, person):
+        self.connections.append(loc_per(loc, person))
 
 class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
     def person_contacts(self, request, context):
