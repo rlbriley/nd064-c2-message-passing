@@ -67,14 +67,16 @@ def connlist_to_json(connection_list):
         pattern_text = r'ST_POINT\(([-\d\.]+)\s+([-\d\.]+)\)'
         pattern = re.compile(pattern_text)
         shape = conn.location._wkt_shape
-        logger.debug(f"shape: {shape}")
         match = pattern.match(shape)
         lo = match.group(1)
         la = match.group(2)
+        logger.debug(f"lo: {lo}, la: {la}")
 
         l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
-        logger.debug(f"location_out: {location_out}")
+
         conn_list.add(l1, conn.person)
+
+        logger.debug(f"location_out: {json.dumps(location_out)}")
 
     logger.debug(f"connList: {conn_list}")
 
@@ -96,12 +98,12 @@ def get(person_id):
 
     logger.debug(f"Sending request to gRPC find_contacts({connQuery})")
 
-    contacts = stub.person_contacts(connQuery)
+    connections = stub.person_contacts(connQuery)
 
-    logger.debug(f"Contacts: {contacts}")
+    logger.debug(f"Connections: {connections}")
 
     # todo convert from ConnectionList to JSON
-    conn_list = connlist_to_json( contacts )
+    conn_list = connlist_to_json( connections )
 
     results: str = json.dumps(conn_list)
 
