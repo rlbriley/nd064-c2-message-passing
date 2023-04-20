@@ -5,7 +5,7 @@ from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
 from typing import Optional, List
 from werkzeug.exceptions import abort
-from google.protobuf.json_format import MessageToJson
+from google.protobuf.json_format import MessageToJson, MessageToDict
 
 import time
 from concurrent import futures
@@ -14,6 +14,7 @@ import grpc
 import connections_pb2
 import connections_pb2_grpc
 import logging
+import re
 from marshmallow import Schema, fields
 from datetime import datetime, date
 from services import ConnectionService
@@ -32,6 +33,52 @@ print("Sending sample payload...")
 channel = grpc.insecure_channel("grpc-connections.default.svc.cluster.local:5005")
 stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
 
+class location_out(dict):
+    # Constructor
+    def __init__(self, id, pid, ctime, lo, la):
+        self['id'] = id
+        self['person_id'] = pid
+        self['creation_time'] = ctime
+        self['longitude'] = lo
+        self['latitude'] = la
+
+class loc_per(dict):
+    def __init__(self, loc, person):
+        self['location'] = loc
+        self['person'] = person
+
+class connections_out:
+    def __init__(self):
+        self.connections = []
+
+    def add(self, loc, person):
+        self.connections.append(loc_per(loc, person))
+
+def connlist_to_json(contacts):
+    contact_cnt = len(contacts)
+    logger.debug(f"Contact count: {contact_cnt}")
+    logger.debug(f"contacts[0].location: {contacts[0].location}")
+    logger.debug(f"contacts[0].person: {contacts[0].person}")
+
+    conn_list = connections_out()
+    for conn in contacts:
+        l = conn.location
+        pattern_text = r'ST_POINT\(([-\d\.]+)\s+([-\d\.]+)\)'
+        pattern = re.compile(pattern_text)
+        shape = conn.location._wkt_shape
+        logger.debug(f"shape: {shape}")
+        match = pattern.match(shape)
+        lo = match.group(1)
+        la = match.group(2)
+
+        l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
+        logger.debug(f"location_out: {location_out}")
+        conn_list.add(l1, conn.person)
+
+    logger.debug(f"connList: {conn_list}")
+
+    json_str = json.dumps(conn_list)
+    return json_str
 
 @app.route("/api/persons/<person_id>/connection", methods = ['GET'])
 def get(person_id):
@@ -51,8 +98,13 @@ def get(person_id):
     contacts = stub.person_contacts(connQuery)
 
     logger.debug(f"Contacts: {contacts}")
+
     # todo convert from ConnectionList to JSON
-    results: str = MessageToJson(contacts)
+    conn_list = connlist_to_json( contacts )
+
+    results: str = json.dumps(conn_list)
+
+    logger.debug(f"results: {results}")
 
     return results
 

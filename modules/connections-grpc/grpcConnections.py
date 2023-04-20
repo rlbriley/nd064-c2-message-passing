@@ -47,7 +47,6 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
         result = ConnectionService.find_contacts(request.person, sdate, edate, request.distance)
 
         connList = connections_pb2.ConnectionList()
-        conn_list1 = connections_out()
         for conn in result:
             logger.debug( f"conn: {conn}")
 
@@ -69,24 +68,25 @@ class ConnectionsServicer(connections_pb2_grpc.ConnectionsServiceServicer):
 
             connList.connections.append(connMsg)
 
-            l = conn.location
-            pattern_text = r'ST_POINT\(([-\d\.]+)\s+([-\d\.]+)\)'
-            pattern = re.compile(pattern_text)
-            shape = conn.location._wkt_shape
-            logger.debug(f"shape: {shape}")
-            match = pattern.match(shape)
-            lo = match.group(1)
-            la = match.group(2)
+            # l = conn.location
+            # pattern_text = r'ST_POINT\(([-\d\.]+)\s+([-\d\.]+)\)'
+            # pattern = re.compile(pattern_text)
+            # shape = conn.location._wkt_shape
+            # logger.debug(f"shape: {shape}")
+            # match = pattern.match(shape)
+            # lo = match.group(1)
+            # la = match.group(2)
 
-            l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
-            conn_list1.add(l1, conn.person)
+            # l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
+            # logger.debug(f"location_out: {location_out}")
+            # conn_list1.add(l1, conn.person)
 
-        logger.debug(f"Response: {connList}")
+        # logger.debug(f"Response: {connList}")
 
         # ooo = json.dumps(conn_list1)
-        # logger.debug(f"New Response: \n{ooo}")
+        logger.debug(f"New Response: \n{connList}")
 
-        return conn_list1
+        return connList
 
 # Initialize gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
