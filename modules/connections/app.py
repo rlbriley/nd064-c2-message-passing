@@ -54,14 +54,15 @@ class connections_out:
     def add(self, loc, person):
         self.connections.append(loc_per(loc, person))
 
-def connlist_to_json(contacts):
-    contact_cnt = len(contacts)
+def connlist_to_json(connection_list):
+    connections = connection_list.connections
+    contact_cnt = len(connections)
     logger.debug(f"Contact count: {contact_cnt}")
-    logger.debug(f"contacts[0].location: {contacts[0].location}")
-    logger.debug(f"contacts[0].person: {contacts[0].person}")
+    logger.debug(f"connections[0].location: {connections[0].location}")
+    logger.debug(f"connections[0].person: {connections[0].person}")
 
     conn_list = connections_out()
-    for conn in contacts:
+    for conn in connections:
         l = conn.location
         pattern_text = r'ST_POINT\(([-\d\.]+)\s+([-\d\.]+)\)'
         pattern = re.compile(pattern_text)
