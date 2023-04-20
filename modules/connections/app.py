@@ -42,10 +42,16 @@ class location_out(dict):
         self['longitude'] = lo
         self['latitude'] = la
 
+    def __str__(self):
+        return json.dumps(self)
+
 class loc_per(dict):
     def __init__(self, loc, person):
         self['location'] = loc
         self['person'] = person
+
+    def __str__(self):
+        return json.dumps(self)
 
 class connections_out:
     def __init__(self):
@@ -76,7 +82,7 @@ def connlist_to_json(connection_list):
 
         conn_list.add(l1, conn.person)
 
-        logger.debug(f"location_out: {json.dumps(location_out)}")
+        logger.debug(f"location_out: {json.dumps(l1)}")
 
     logger.debug(f"connList: {conn_list}")
 
