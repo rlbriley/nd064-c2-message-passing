@@ -111,7 +111,7 @@ def get(person_id):
         end_date=edate,
         distance=dist )
 
-    logger.debug(f"Sending request to gRPC find_contacts({connQuery})")
+    logger.debug(f"gRPC response from find_contacts: {connQuery}")
 
     connections = stub.person_contacts(connQuery)
 
@@ -120,11 +120,11 @@ def get(person_id):
     # todo convert from ConnectionList to JSON
     conn_list = connlist_to_json( connections )
 
-    results: str = json.dumps(conn_list)
+    # results: str = json.dumps(conn_list)
 
-    logger.debug(f"results: {results}")
+    logger.debug(f"results: {conn_list}")
 
-    return results
+    return conn_list
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
