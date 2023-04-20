@@ -53,7 +53,7 @@ class person_out(dict):
         self['company_name'] = person.company_name
 
 class loc_per(dict):
-    def __init__(self, loc, person):
+    def __init__(self, loc: location_out, person: person_out):
         self['location'] = loc
         self['person'] = person
 
@@ -64,7 +64,7 @@ class connections_out:
     def __init__(self):
         self.connections = []
 
-    def add(self, loc, person):
+    def add(self, loc: location_out, person: person_out):
         self.connections.append(loc_per(loc, person))
 
 def connlist_to_json(connection_list):
@@ -83,7 +83,6 @@ def connlist_to_json(connection_list):
         match = pattern.match(shape)
         lo = match.group(1)
         la = match.group(2)
-        logger.debug(f"lo: {lo}, la: {la}")
 
         l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
         p1 = person_out(conn.person)
@@ -93,9 +92,10 @@ def connlist_to_json(connection_list):
         logger.debug(f"location_out: {json.dumps(l1)}")
         logger.debug(f"person_out: {json.dumps(p1)}")
 
-    logger.debug(f"connList: {conn_list}")
+    logger.debug(f"connList: {conn_list.connections}")
 
-    json_str = json.dumps(conn_list)
+    json_str = json.dumps(conn_list.connections)
+
     return json_str
 
 @app.route("/api/persons/<person_id>/connection", methods = ['GET'])
