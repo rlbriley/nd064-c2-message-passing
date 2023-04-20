@@ -18,6 +18,7 @@ import re
 from marshmallow import Schema, fields
 from datetime import datetime, date
 from services import ConnectionService
+import OrderedDict
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -117,14 +118,17 @@ def get(person_id):
 
     logger.debug(f"Connections: {connections}")
 
-    # todo convert from ConnectionList to JSON
+    # convert from ConnectionList to JSON
     conn_list = connlist_to_json( connections )
 
     # results: str = json.dumps(conn_list)
+    # pretty print the json
+    json_object = json.loads(conn_list)
+    json_formatted_str = json.dumps(json_object, indent=2)
 
-    logger.debug(f"results: {conn_list}")
+    logger.debug(f"results: {json_formatted_str}")
 
-    return conn_list
+    return json_formatted_str
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
