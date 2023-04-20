@@ -18,7 +18,6 @@ import re
 from marshmallow import Schema, fields
 from datetime import datetime, date
 from services import ConnectionService
-import OrderedDict
 
 DATE_FORMAT = "%Y-%m-%d"
 
