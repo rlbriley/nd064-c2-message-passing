@@ -81,8 +81,8 @@ def connlist_to_json(connection_list):
         pattern = re.compile(pattern_text)
         shape = conn.location._wkt_shape
         match = pattern.match(shape)
-        lo = match.group(1)
-        la = match.group(2)
+        la = match.group(1)
+        lo = match.group(2)
 
         l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
         p1 = person_out(conn.person)
