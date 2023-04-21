@@ -125,7 +125,7 @@ def get(person_id):
         response = conn_list,
         status = 200,
         mimetype = 'application/json'
-        # )
+    )
     # else:
     #     response = app.response_class(
     #         response = conn_list,
