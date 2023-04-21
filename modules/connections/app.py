@@ -27,8 +27,8 @@ logger = logging.getLogger("connections")
 
 # Define the Flask application
 app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app)
+#app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app, resources=r'/api/*')
 
 print("Sending sample payload...")
 
@@ -101,7 +101,6 @@ def connlist_to_json(connection_list):
 
     return json_str
 
-@cross_origin()
 @app.route("/api/persons/<person_id>/connection", methods = ['GET'])
 def get(person_id):
     logger.debug(f"request: {request}")
@@ -135,7 +134,7 @@ def get(person_id):
     # response = jsonify(json_object)
     # response.headers.add("Access-Control-Allow-Origin", "*")
     # logger.debug(f"response: {response}")
-    return json_object
+    return json_mini_str
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
