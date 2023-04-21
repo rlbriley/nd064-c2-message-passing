@@ -124,11 +124,12 @@ def get(person_id):
     # pretty print the json
     json_object = json.loads(conn_list)
     # json_formatted_str = json.dumps(json_object, indent=2)
+    # logger.debug(f"results: {json_formatted_str}\nresults size: {json_formatted_str.len()}")
     json_mini_str = json.dumps(json_object, separators=(',', ':'))
 
-    logger.debug(f"results: {json_mini_str}")
+    logger.debug(f"results: {json_mini_str}\nresults size: {json_mini_str.len()}")
 
-    return json_mini_str
+    return json_object
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
