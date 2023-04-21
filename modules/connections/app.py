@@ -118,8 +118,8 @@ def get(person_id):
     logger.debug(f"Connections: {connections}")
 
     # convert from ConnectionList to JSON
-    conn_list = connlist_to_json( connections )
-    if len(conn_list) > 0:
+    if connections:
+        conn_list = connlist_to_json( connections )
         response = app.response_class(
             response = conn_list,
             status = 200,
