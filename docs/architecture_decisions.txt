@@ -1,0 +1,14 @@
+Broke the monolith into three separate rest containers. This way the contaners
+can scale basedupon the load and there is less coupeling between the containers.
+
+Then because kafka doesn't support a response, I put the kafka implementation
+into the Locations container which was already separated from the monolith.
+In a production implementation I would only implement kafka where there is
+a performance bottleneck in the application.
+
+Because I am not familiar with REACT I implemented a gRPC connection between
+two containers that provide the connections information to the frontend application.
+The Connections Rest container can be removed from the system. By implementing
+the gRPC client call directly from the REACT frontend. The reason for implementing
+the gRPC interface in the connections module. Is because it provides the most
+data comming back from any of the services.

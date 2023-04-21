@@ -1,0 +1,34 @@
+The following small python program that is included as writer.py in the modules
+connections-grpc directory can be used to generate a test gRPC message for the
+connections-grpc container. You can access the provided writer.py once the
+pod is up and running by opening a shell into the container with:
+
+kubectl exec --stdin --tty <Name of grpc-connections pod> -- /bin/sh
+
+Then executing: python3 writer.py
+
+
+
+import grpc
+import connections_pb2
+import connections_pb2_grpc
+
+"""
+Sample implementation of a writer that can be used to write messages to gRPC.
+"""
+
+print("Sending sample payload...")
+
+channel = grpc.insecure_channel("localhost:5005")
+stub = connections_pb2_grpc.ConnectionsServiceStub(channel)
+
+# Update this with desired payload
+item = connections_pb2.ConnectionQuery(
+    person=5,
+    start_date="2020-01-01",
+    end_date="2020-12-30",
+    distance=5
+)
+
+
+response = stub.person_contacts(item)
