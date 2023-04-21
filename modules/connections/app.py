@@ -16,9 +16,9 @@ import connections_pb2
 import connections_pb2_grpc
 import logging
 import re
-from marshmallow import Schema, fields
-from datetime import datetime, date
-from services import ConnectionService
+# from marshmallow import Schema, fields
+# from datetime import datetime, date
+# from services import ConnectionService
 
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -27,7 +27,6 @@ logger = logging.getLogger("connections")
 
 # Define the Flask application
 app = Flask(__name__)
-#app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app, resources=r'/api/*')
 
 print("Sending sample payload...")
@@ -80,6 +79,7 @@ def connlist_to_json(connection_list):
     conn_list = connections_out()
     for conn in connections:
         l = conn.location
+        # get the latitude (la) and longitue (lo) from the wkt_shape
         pattern_text = r'ST_POINT\(([-\d\.]+)\s+([-\d\.]+)\)'
         pattern = re.compile(pattern_text)
         shape = conn.location._wkt_shape
@@ -87,7 +87,9 @@ def connlist_to_json(connection_list):
         la = match.group(1)
         lo = match.group(2)
 
+        # Convert from location message to location_out dict object
         l1 = location_out(l.id, l.person_id, conn.location.creation_time, lo, la)
+        # Convert conn.person to person_out dict object
         p1 = person_out(conn.person)
 
         conn_list.add(l1, p1)
@@ -100,6 +102,7 @@ def connlist_to_json(connection_list):
     json_str = json.dumps(conn_list.connections)
 
     return json_str
+
 
 @app.route("/api/persons/<person_id>/connection", methods = ['GET'])
 def get(person_id):
@@ -123,11 +126,10 @@ def get(person_id):
     # convert from ConnectionList to JSON
     conn_list = connlist_to_json( connections )
 
-    json_object = json.loads(conn_list)
+    response = jsonify(conn_list)
 
-    response = jsonify(json_object)
+    return response
 
-    return conn_list
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
