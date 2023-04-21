@@ -129,7 +129,7 @@ def get(person_id):
 
     logger.debug(f"results: {json_mini_str}\nresults size: {json_mini_str.len()}")
 
-    return json_object
+    return json_mini_str
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
