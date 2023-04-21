@@ -1,12 +1,12 @@
 #!/sur/bin/env python3
-from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash, make_response
+from flask import Flask, jsonify, json, request
 from flask import request
 from flask_cors import CORS
-from flask_accepts import accepts, responds
+# from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
-from typing import Optional, List
-from werkzeug.exceptions import abort
-from google.protobuf.json_format import MessageToJson, MessageToDict
+# from typing import Optional, List
+# from werkzeug.exceptions import abort
+# from google.protobuf.json_format import MessageToJson, MessageToDict
 
 import time
 from concurrent import futures
@@ -125,13 +125,13 @@ def get(person_id):
 
     # convert from ConnectionList to JSON
     conn_list = connlist_to_json( connections )
-    # response = make_response(conn_list)
-    # response.headers['content-type'] = 'application/json'
+
     response = app.response_class(
         response = conn_list,
         status = 200,
         mimetype = 'application/json'
     )
+
     return response
 
 
