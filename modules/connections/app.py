@@ -120,18 +120,18 @@ def get(person_id):
     conn_list = connlist_to_json( connections )
 
     # convert from ConnectionList to JSON
-    if connections.connections:
-        response = app.response_class(
-            response = conn_list,
-            status = 200,
-            mimetype = 'application/json'
-        )
-    else:
-        response = app.response_class(
-            response = conn_list,
-            status = 204,
-            mimetype = 'application/json'
-        )
+    # if connections.connections:
+    response = app.response_class(
+        response = conn_list,
+        status = 200,
+        mimetype = 'application/json'
+        # )
+    # else:
+    #     response = app.response_class(
+    #         response = conn_list,
+    #         status = 204,
+    #         mimetype = 'application/json'
+    #     )
 
     return response
 
