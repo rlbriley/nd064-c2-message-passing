@@ -131,10 +131,10 @@ def get(person_id):
     json_mini_str = json.dumps(json_object, separators=(',', ':'))
 
     logger.debug(f"results: {json_mini_str}\nresults size: {len(json_mini_str)}")
-    # response = jsonify(json_object)
+    response = jsonify(json_object)
     # response.headers.add("Access-Control-Allow-Origin", "*")
     # logger.debug(f"response: {response}")
-    return json_mini_str
+    return response
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
