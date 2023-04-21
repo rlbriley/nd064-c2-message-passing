@@ -2,11 +2,7 @@
 from flask import Flask, jsonify, json, request
 from flask import request
 from flask_cors import CORS
-# from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
-# from typing import Optional, List
-# from werkzeug.exceptions import abort
-# from google.protobuf.json_format import MessageToJson, MessageToDict
 
 import time
 from concurrent import futures
@@ -16,9 +12,6 @@ import connections_pb2
 import connections_pb2_grpc
 import logging
 import re
-# from marshmallow import Schema, fields
-# from datetime import datetime, date
-# from services import ConnectionService
 
 DATE_FORMAT = "%Y-%m-%d"
 
