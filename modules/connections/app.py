@@ -123,18 +123,11 @@ def get(person_id):
     # convert from ConnectionList to JSON
     conn_list = connlist_to_json( connections )
 
-    # results: str = json.dumps(conn_list)
-    # pretty print the json
     json_object = json.loads(conn_list)
-    # json_formatted_str = json.dumps(json_object, indent=2)
-    # logger.debug(f"results: {json_formatted_str}\nresults size: {len(json_formatted_str)}")
-    json_mini_str = json.dumps(json_object, separators=(',', ':'))
 
-    logger.debug(f"results: {json_mini_str}\nresults size: {len(json_mini_str)}")
     response = jsonify(json_object)
-    # response.headers.add("Access-Control-Allow-Origin", "*")
-    # logger.debug(f"response: {response}")
-    return response
+
+    return conn_list
 
 # health REST route.
 # Will return "OK - healthy" if the application is running
