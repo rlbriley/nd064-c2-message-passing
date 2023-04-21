@@ -1,5 +1,5 @@
 #!/sur/bin/env python3
-from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
+from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash, make_response
 from flask import request
 from flask_cors import CORS
 from flask_accepts import accepts, responds
@@ -125,9 +125,13 @@ def get(person_id):
 
     # convert from ConnectionList to JSON
     conn_list = connlist_to_json( connections )
-
-    response = jsonify(conn_list)
-
+    # response = make_response(conn_list)
+    # response.headers['content-type'] = 'application/json'
+    response = app.response_class(
+        response = conn_list,
+        status = 200,
+        mimetype = 'application/json'
+    )
     return response
 
 
@@ -140,9 +144,9 @@ def health():
     Will return "OK - healthy" if the application is running
     '''
     response = app.response_class(
-        response=json.dumps({"result": "OK - healthy"}),
-        status=200,
-        mimetype='application/json'
+        response = json.dumps({"result": "OK - healthy"}),
+        status = 200,
+        mimetype = 'application/json'
     )
     logger.info('healthz request successful response=%s',
              json.dumps(response.json))
