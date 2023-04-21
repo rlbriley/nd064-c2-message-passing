@@ -66,8 +66,9 @@ def connlist_to_json(connection_list):
     connections = connection_list.connections
     contact_cnt = len(connections)
     logger.debug(f"Contact count: {contact_cnt}")
-    logger.debug(f"connections[0].location: {connections[0].location}")
-    logger.debug(f"connections[0].person: {connections[0].person}")
+    if contact_cnt > 0:
+        logger.debug(f"connections[0].location: {connections[0].location}")
+        logger.debug(f"connections[0].person: {connections[0].person}")
 
     conn_list = connections_out()
     for conn in connections:
@@ -118,12 +119,18 @@ def get(person_id):
 
     # convert from ConnectionList to JSON
     conn_list = connlist_to_json( connections )
-
-    response = app.response_class(
-        response = conn_list,
-        status = 200,
-        mimetype = 'application/json'
-    )
+    if len(conn_list) > 0:
+        response = app.response_class(
+            response = conn_list,
+            status = 200,
+            mimetype = 'application/json'
+        )
+    else:
+        response = app.response_class(
+            response = "",
+            status = 204,
+            mimetype = 'application/json'
+        )
 
     return response
 

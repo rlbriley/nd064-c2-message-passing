@@ -34,8 +34,6 @@ class LocationResource(Resource):
     def post(self) -> Location:
         locationJson = request.get_json()
 
-        # producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
-
         # send to kafka
         locStr = json.dumps(locationJson).encode('utf-8')
         logger.info(f"Adding Location to `locations` mailbox. '{locStr}'")
@@ -47,6 +45,7 @@ class LocationResource(Resource):
             location = LocationSchema().load(locationJson)
         except ValidationError as err:
             logger.error(err.messages)
+
         return location
 
     @responds(schema=LocationSchema)

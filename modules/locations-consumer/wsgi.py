@@ -50,6 +50,7 @@ class LocationService:
         cur = conn.cursor()
         # according to the documentation the latitude and longitude are backwards in
         # this statement. However it matches the code in the original query.
+        # see: https://www.sqlshack.com/getting-started-with-spatial-data-in-postgresql/#:~:text=and%20longitude%20coordinates.-,POINT,-Data%20Type
         query = f"INSERT INTO location (id, person_id, coordinate, creation_time) VALUES \
                  ({nextId}, {location['person_id']}, ST_GeomFromText(\'POINT({location['latitude']} {location['longitude']})\', 4326), \'{location['creation_time']}\');"
         logger.info(f"Query: {query}")
