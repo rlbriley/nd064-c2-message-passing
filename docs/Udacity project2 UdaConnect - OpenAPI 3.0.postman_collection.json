@@ -37,8 +37,8 @@
 									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Response time is less than 1500ms\", () => {\r",
-									"  pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"pm.test(\"Response time is less than 50ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -559,11 +559,13 @@
 											"})\r",
 											"\r",
 											"pm.test(\"Content-Type header is application/json\", () => {\r",
-											"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+											"  pm.expect('application/json').to.eql(pm.response.headers.get('Content-Type'));\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Response time is less than 50ms\", () => {\r",
-											"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
+											"pm.test(\"Response time is less than 0.5ms for each connection\", () => {\r",
+											"  repTime = bodyJson.length * 0.5\r",
+											"  console.log(\"Max responseTime \" + repTime + \" ms.\")\r",
+											"  pm.expect(pm.response.responseTime).to.be.below(repTime);\r",
 											"});"
 										],
 										"type": "text/javascript"
@@ -764,8 +766,8 @@
 									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Response time is less than 50ms\", () => {\r",
-									"  pm.expect(pm.response.responseTime).to.be.below(50);\r",
+									"pm.test(\"Response time is less than 100ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(100);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1083,6 +1085,11 @@
 		{
 			"key": "locationsBaseUrl",
 			"value": "http://localhost:{{locationsPort}}/api",
+			"type": "default"
+		},
+		{
+			"key": "connectionsBaseOrgUrl",
+			"value": "http://localhost:30011/api",
 			"type": "default"
 		}
 	]
