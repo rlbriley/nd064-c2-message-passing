@@ -9,7 +9,7 @@
 - Run `kubectl exec --stdin --tty <kafka pod name> -- /bin/bash`
   - In the prompt that opens execute:
      - `/opt/kafka_2.13-2.8.1/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic locations` To create the 'locations' topic within kafka.
-     - Optional `/opt/kafka_2.13-2.8.1/bin/kafka-topics.bat --list --bootstrap-server localhost:9092` can be used to check for the newly created topic.
+     - Optional `/opt/kafka_2.13-2.8.1/bin/kafka-topics.sh --list --bootstrap-server localhost:9092` can be used to check for the newly created topic.
   - Execute `exit` on the command line to exit the bash terminal in the pod and return to your local command line.
 - Run `kubectl apply -f db-configmap.yaml`
 - Run `kubectl apply -f db-secret.yaml`
